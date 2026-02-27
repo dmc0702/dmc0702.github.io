@@ -101,4 +101,6 @@ theme: redefine
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: git  # 关键修正：指定部署类型为git
+  repo: https://github.com/dmc0702/dmc0702.github.io.git  # 你的仓库地址
+  branch: main  # 关键修正：部署到main分支（专属仓库必须用main）
