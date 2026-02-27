@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dmc0702 - 个人主页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background-image: url('https://picsum.photos/id/1036/1920/1080');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .quote-mark {
+            position: absolute;
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+        .quote-mark.left {
+            top: -1rem;
+            left: -1rem;
+        }
+        .quote-mark.right {
+            bottom: -3rem;
+            right: -1rem;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .yiyan-wrap {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        .yiyan-wrap h1 {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+        #yiyan {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+<div class="min-h-screen flex flex-col">
+    <nav class="glass p-4 flex justify-between items-center">
+        <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white/20">
+                <img src="https://cdn.luogu.com.cn/upload/usericon/1048333.png" class="w-full h-full object-cover">
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight" style="font-family: 'Pacifico', cursive;">dmc0702</h1>
+        </div>
+        <div class="flex space-x-4">
+            <button class="p-2 hover:bg-white/10 rounded-full transition-colors">
+                <i class="fas fa-github"></i>
+            </button>
+            <button class="p-2 hover:bg-white/10 rounded-full transition-colors">
+                <i class="fas fa-twitter"></i>
+            </button>
+            <button class="p-2 hover:bg-white/10 rounded-full transition-colors">
+                <i class="fas fa-envelope"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main class="flex-1 p-8 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto w-full">
+        <div class="md:col-span-1 space-y-6">
+            <div class="glass rounded-2xl p-6 relative overflow-hidden">
+                <span class="quote-mark left">“</span>
+                <div class="yiyan-wrap">
+                    <h1>每日一言</h1>
+                    <p id="yiyan">加载中...</p>
+                </div>
+                <span class="quote-mark right">”</span>
+            </div>
+
+            <div class="glass rounded-2xl p-6">
+                <h3 class="text-sm font-semibold mb-4 text-white/80">快捷链接</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="#" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-colors">
+                        <i class="fas fa-code mr-2"></i> OJ
+                    </a>
+                    <a href="#" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-colors">
+                        <i class="fas fa-blog mr-2"></i> 博客
+                    </a>
+                    <a href="#" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-colors">
+                        <i class="fas fa-film mr-2"></i> 视频
+                    </a>
+                    <a href="#" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-colors">
+                        <i class="fas fa-user mr-2"></i> 关于
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:col-span-2 space-y-6">
+            <div class="glass rounded-2xl p-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div>
+                        <p class="text-sm text-white/60 mb-1" id="currentDate"></p>
+                        <p class="text-4xl font-bold" id="currentTime">00:00:00</p>
+                        <p class="text-sm text-white/60 mt-2">多云 · 等待天气数据</p>
+                    </div>
+                    <div class="mt-4 md:mt-0 flex items-center">
+                        <i class="fas fa-cloud-sun text-4xl text-white/60 mr-3"></i>
+                        <span class="text-2xl">--°C</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass rounded-2xl p-6">
+                <h3 class="text-sm font-semibold mb-4 flex items-center">
+                    <i class="fas fa-hourglass-half mr-2"></i> 时光胶囊
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>今日已度过</span>
+                            <span id="percent-day">0%</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="bar-day" style="width:0%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>本周已度过</span>
+                            <span id="percent-week">0%</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="bar-week" style="width:0%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>本月已度过</span>
+                            <span id="percent-month">0%</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="bar-month" style="width:0%"></div></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>今年已度过</span>
+                            <span id="percent-year">0%</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="bar-year" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass rounded-2xl p-6">
+                <h3 class="text-sm font-semibold mb-4 text-white/80">网站列表</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
+                        <i class="fas fa-link mr-2"></i> XRCOI OJ
+                    </a>
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
+                        <i class="fas fa-link mr-2"></i> 洛谷
+                    </a>
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
+                        <i class="fas fa-comments mr-2"></i> XRCOI 聊天室
+                    </a>
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
+                        <i class="fas fa-code mr-2"></i> rgw-oj
+                    </a>
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
+                        <i class="fas fa-video mr-2"></i> 视频播放
+                    </a>
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
+                        <i class="fas fa-user mr-2"></i> Cby 的主页
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="glass p-4 text-center text-sm text-white/60">
+        <p>Copyright © 2024-2026 dmc0702 & Made with ❤️</p>
+    </footer>
+</div>
+
+<button id="backToTop" class="fixed bottom-8 right-8 glass w-12 h-12 rounded-full flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-white/20">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<div id="settingsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center hidden">
+    <div class="glass rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto animate-fadeIn">
+        <div class="p-6 flex justify-between items-center border-b border-white/10">
+            <h2 class="text-xl font-bold">全局设置</h2>
+            <button id="closeSettings" class="text-white/60 hover:text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold mb-3 text-white/80">个性壁纸</h3>
+                <div class="flex flex-wrap gap-3">
+                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-colors">默认壁纸</button>
+                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-colors">每日一图</button>
+                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-colors">随机风景</button>
+                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-colors">随机动漫</button>
+                </div>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold mb-3 text-white/80">个性化调整</h3>
+                <p class="text-sm text-white/60">更多设置开发中…</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 时间
+    function updateTime() {
+        const now = new Date();
+        document.getElementById('currentTime').innerText = now.toLocaleTimeString('zh-CN', { hour12: false });
+        document.getElementById('currentDate').innerText = now.toLocaleDateString('zh-CN', {
+            year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'long'
+        }).replace(/\//g, '-');
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // 时光胶囊进度
+    function updateCapsule() {
+        const now = new Date();
+        const d = now.getDate(), h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+        const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        const dayPercent = ((now - dayStart) / 86400000 * 100).toFixed(1);
+        const weekPercent = (((now.getDay() || 7) - 1) * 100 / 6).toFixed(1);
+        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        const monthPercent = (d / daysInMonth * 100).toFixed(1);
+        const yearStart = new Date(now.getFullYear(), 0, 1).getTime();
+        const yearTotal = new Date(now.getFullYear() + 1, 0, 1).getTime() - yearStart;
+        const yearPercent = ((now - yearStart) / yearTotal * 100).toFixed(1);
+
+        document.getElementById('percent-day').innerText = dayPercent + '%';
+        document.getElementById('bar-day').style.width = dayPercent + '%';
+        document.getElementById('percent-week').innerText = weekPercent + '%';
+        document.getElementById('bar-week').style.width = weekPercent + '%';
+        document.getElementById('percent-month').innerText = monthPercent + '%';
+        document.getElementById('bar-month').style.width = monthPercent + '%';
+        document.getElementById('percent-year').innerText = yearPercent + '%';
+        document.getElementById('bar-year').style.width = yearPercent + '%';
+    }
+    updateCapsule();
+    setInterval(updateCapsule, 60000);
+
+    // 回到顶部
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            backBtn.classList.remove('opacity-0', 'invisible');
+            backBtn.classList.add('opacity-100');
+        } else {
+            backBtn.classList.add('opacity-0', 'invisible');
+        }
+    });
+    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // 弹窗
+    document.getElementById('closeSettings').onclick = () => {
+        document.getElementById('settingsModal').classList.add('hidden');
+    };
+
+    // 一言 API（自动去掉 <p> 标签）
+    async function loadYiyan() {
+        const el = document.getElementById('yiyan');
+        try {
+            const res = await fetch('https://v.api.aa1.cn/api/yiyan/index.php');
+            let text = await res.text();
+            text = text.replace(/<[^>]+>/g, '').trim();
+            el.innerText = text || '保持热爱，奔赴山海。';
+        } catch (e) {
+            el.innerText = '保持热爱，奔赴山海。';
+        }
+    }
+    window.onload = loadYiyan;
+</script>
+</body>
+</html>
