@@ -2,14 +2,11 @@
 name: GitHub Pages
 
 on:
-  # 触发条件：推送到 main 分支时执行（根据你的分支名调整，比如 master）
   push:
     branches:
-      - main
-  # 可选：允许手动触发工作流
+      - main  # 你的源码分支
   workflow_dispatch:
 
-# 设置权限，确保能正常推送部署结果
 permissions:
   contents: write
 
@@ -17,37 +14,37 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1. 拉取仓库代码（包含完整提交历史）
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # 2. 设置 Node.js 环境（兼容 Hexo 7.3.0）
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm' # 缓存 npm 依赖，加速构建
+          cache: 'npm'
 
-      # 3. 安装项目依赖
       - name: Install Dependencies
         run: npm install
 
-      # 4. 核心修复：全局安装 hexo-cli（解决 Permission denied 问题）
+      # 安装redefine主题依赖（如果主题需要）
+      - name: Install theme dependencies
+        run: cd themes/redefine && npm install
+
       - name: Install hexo-cli globally
         run: sudo npm install -g hexo-cli
 
-      # 5. 清理并构建 Hexo 静态文件
       - name: Build Hexo Site
         run: |
           npm run clean
-          npm run build
+          hexo generate  # 直接用hexo命令，避免npm script问题
 
-      # 6. 部署到 GitHub Pages
+      # 关键修正：部署到main分支，且强制覆盖
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public # Hexo 构建后的静态文件目录
-          publish_branch: gh-pages # 部署到 gh-pages 分支
+          publish_dir: ./public
+          publish_branch: main  # 专属仓库必须部署到main
+          force_orphan: true     # 强制覆盖main分支内容
