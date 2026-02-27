@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "npx hexo generate",  // 核心修改：添加 npx 前缀
-    "clean": "npx hexo clean",     // 建议同步修改，避免后续其他命令出问题
-    "deploy": "npx hexo deploy",   // 建议同步修改
-    "server": "npx hexo server"    // 建议同步修改
+    "build": "npx hexo generate",
+    "clean": "npx hexo clean",
+    "deploy": "npx hexo deploy",
+    "server": "npx hexo server"
   },
   "hexo": {
     "version": "7.3.0"
