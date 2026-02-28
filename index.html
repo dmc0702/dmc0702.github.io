@@ -396,24 +396,6 @@
         }
         localStorage.setItem('todayVisits_dmc', todayCount);
         document.getElementById('todayCount').innerText = todayCount.toLocaleString();
-
-        // ---- 3. 独立访客数 (基于设备ID) ----
-        let visitorId = localStorage.getItem('visitorId_dmc');
-        let visitorCount = localStorage.getItem('visitorCount_dmc');
-        
-        if (!visitorId) {
-            // 新访客，生成唯一ID
-            visitorId = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('visitorId_dmc', visitorId);
-            
-            // 总访客数+1
-            visitorCount = parseInt(visitorCount || 0) + 1;
-            localStorage.setItem('visitorCount_dmc', visitorCount);
-        } else {
-            visitorCount = parseInt(visitorCount || 1);
-        }
-        document.getElementById('visitorCount').innerText = visitorCount.toLocaleString();
-
         // ---- 5. 建站天数 (从2026年1月1日开始计算) ----
         const startDate = new Date('2026-02-26');
         const currentDate = new Date();
