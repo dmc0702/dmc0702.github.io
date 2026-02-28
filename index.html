@@ -80,177 +80,311 @@
             line-height: 1.8;
             margin-bottom: 1rem;
         }
+        /* 添加动画效果 */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .animate-pulse-slow {
+            animation: pulse 3s infinite;
+        }
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
     </style>
 </head>
 <body class="min-h-screen text-white">
 <div class="min-h-screen flex flex-col">
-    <nav class="glass p-4 flex justify-between items-center">
+    <!-- 导航栏 - 添加设置按钮 -->
+    <nav class="glass p-4 flex justify-between items-center sticky top-0 z-40">
         <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white/20">
+            <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 hover:border-white/40 transition-all duration-300">
                 <img src="https://cdn.luogu.com.cn/upload/usericon/1048333.png" class="w-full h-full object-cover">
             </div>
             <h1 class="text-3xl font-bold tracking-tight" style="font-family: 'Pacifico', cursive;">dmc0702</h1>
         </div>
         <div class="flex space-x-4">
-            <button class="p-2 hover:bg-white/10 rounded-full transition-colors">
-                <i class="fab fa-github"></i>
+            <!-- 设置按钮 - 现在可见了 -->
+            <button id="openSettings" class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
+                <i class="fas fa-cog text-xl"></i>
+                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">设置</span>
             </button>
-            <button class="p-2 hover:bg-white/10 rounded-full transition-colors">
-                <i class="fab fa-twitter"></i>
+            <button class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
+                <i class="fab fa-github text-xl"></i>
+                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">GitHub</span>
             </button>
-            <button class="p-2 hover:bg-white/10 rounded-full transition-colors">
-                <i class="fas fa-envelope"></i>
+            <button class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
+                <i class="fab fa-twitter text-xl"></i>
+                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Twitter</span>
+            </button>
+            <button class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
+                <i class="fas fa-envelope text-xl"></i>
+                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">邮箱</span>
             </button>
         </div>
     </nav>
 
     <main class="flex-1 p-8 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto w-full">
+        <!-- 左侧栏 -->
         <div class="md:col-span-1 space-y-6">
-            <div class="glass rounded-2xl p-6 relative overflow-hidden">
+            <!-- 每日一言卡片 -->
+            <div class="glass rounded-2xl p-6 relative overflow-hidden group hover:border-white/20 transition-all duration-300">
                 <span class="quote-mark left">“</span>
                 <div class="yiyan-wrap">
-                    <h1>每日一言</h1>
-                    <p id="yiyan">加载中...</p>
+                    <h1 class="flex items-center justify-center gap-2">
+                        <i class="fas fa-quote-right text-white/40"></i>
+                        每日一言
+                        <i class="fas fa-quote-left text-white/40"></i>
+                    </h1>
+                    <p id="yiyan" class="relative z-10 font-medium leading-relaxed">加载中...</p>
+                    <p class="text-xs text-white/40 mt-4">—— 今日份的灵感</p>
                 </div>
                 <span class="quote-mark right">”</span>
+                <!-- 装饰性元素 -->
+                <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
             </div>
 
+            <!-- 快捷链接卡片 -->
             <div class="glass rounded-2xl p-6">
-                <h3 class="text-sm font-semibold mb-4 text-white/80">快捷链接</h3>
+                <h3 class="text-sm font-semibold mb-4 text-white/80 flex items-center">
+                    <i class="fas fa-link mr-2"></i>
+                    快捷链接
+                </h3>
                 <div class="grid grid-cols-2 gap-3">
-                    <a href="https://dmcforum.freeflarum.com/" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-colors">
-                        <i class="fas fa-comments mr-2"></i> Digo
+                    <a href="https://dmcforum.freeflarum.com/" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-all duration-300 group">
+                        <i class="fas fa-comments mr-2 text-blue-300 group-hover:text-blue-200"></i>
+                        <span class="text-sm">Digo</span>
                     </a>
-                    <a href="https://www.luogu.com.cn/user/1048333/article" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-colors">
-                        <i class="fas fa-blog mr-2"></i> 博客
+                    <a href="https://www.luogu.com.cn/user/1048333/article" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-all duration-300 group">
+                        <i class="fas fa-blog mr-2 text-green-300 group-hover:text-green-200"></i>
+                        <span class="text-sm">博客</span>
                     </a>
-                    <a href="https://becoder.com.cn/loginpromote/14083/b98ceeec22/dcad1b92651abdcaeccd41f1323953348d19eaa3255bab374a67505b23c4f56e/1772244678686" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-colors">
-                        <i class="fas fa-code mr-2"></i> 必可
+                    <a href="https://becoder.com.cn/loginpromote/14083/b98ceeec22/dcad1b92651abdcaeccd41f1323953348d19eaa3255bab374a67505b23c4f56e/1772244678686" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-all duration-300 group">
+                        <i class="fas fa-code mr-2 text-purple-300 group-hover:text-purple-200"></i>
+                        <span class="text-sm">必可</span>
                     </a>
-                    <a href="https://www.luogu.com.cn/user/1048333" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-colors">
-                        <i class="fas fa-user mr-2"></i> 联系我
+                    <a href="https://www.luogu.com.cn/user/1048333" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-all duration-300 group">
+                        <i class="fas fa-user mr-2 text-yellow-300 group-hover:text-yellow-200"></i>
+                        <span class="text-sm">联系我</span>
                     </a>
+                </div>
+            </div>
+
+            <!-- 添加一个小工具卡片 -->
+            <div class="glass rounded-2xl p-6">
+                <h3 class="text-sm font-semibold mb-4 text-white/80 flex items-center">
+                    <i class="fas fa-tools mr-2"></i>
+                    小工具
+                </h3>
+                <div class="space-y-2">
+                    <button onclick="window.open('https://www.baidu.com', '_blank')" class="w-full glass p-2 rounded-lg text-sm hover:bg-white/10 transition-all duration-300 flex items-center justify-center">
+                        <i class="fas fa-search mr-2"></i> 百度搜索
+                    </button>
+                    <button onclick="window.open('https://translate.google.com', '_blank')" class="w-full glass p-2 rounded-lg text-sm hover:bg-white/10 transition-all duration-300 flex items-center justify-center">
+                        <i class="fas fa-language mr-2"></i> 谷歌翻译
+                    </button>
                 </div>
             </div>
         </div>
 
+        <!-- 右侧主内容区 -->
         <div class="md:col-span-2 space-y-6">
-            <div class="glass rounded-2xl p-6">
+            <!-- 时间天气卡片 -->
+            <div class="glass rounded-2xl p-6 hover:border-white/20 transition-all duration-300">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div>
-                        <p class="text-sm text-white/60 mb-1" id="currentDate"></p>
-                        <p class="text-4xl font-bold" id="currentTime">00:00:00</p>
-                        <!-- 天气描述区域：显示城市和天气状况，id用于动态更新 -->
-                        <p class="text-sm text-white/60 mt-2" id="weatherDesc">重庆 · 获取天气中...</p>
+                        <p class="text-sm text-white/60 mb-1 flex items-center">
+                            <i class="far fa-calendar-alt mr-2"></i>
+                            <span id="currentDate"></span>
+                        </p>
+                        <p class="text-5xl font-bold tracking-wider" id="currentTime">00:00:00</p>
+                        <p class="text-sm text-white/60 mt-2 flex items-center" id="weatherDesc">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            重庆 · 获取天气中...
+                        </p>
                     </div>
-                    <div class="mt-4 md:mt-0 flex items-center">
-                        <!-- 天气图标 -->
-                        <i class="fas fa-cloud-sun text-4xl text-white/60 mr-3" id="weatherIcon"></i>
-                        <!-- 温度区域：只显示今日温度 -->
-                        <span class="text-2xl" id="weatherTemp">--°C</span>
+                    <div class="mt-4 md:mt-0 flex items-center bg-white/5 px-6 py-3 rounded-2xl">
+                        <i class="fas fa-cloud-sun text-5xl text-white/60 mr-4 animate-pulse-slow" id="weatherIcon"></i>
+                        <div class="text-right">
+                            <span class="text-3xl font-bold" id="weatherTemp">--°C</span>
+                            <p class="text-xs text-white/40 mt-1">实时天气</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- 时光胶囊卡片 -->
             <div class="glass rounded-2xl p-6">
                 <h3 class="text-sm font-semibold mb-4 flex items-center">
-                    <i class="fas fa-hourglass-half mr-2"></i> 时光胶囊
+                    <i class="fas fa-hourglass-half mr-2 text-yellow-300"></i>
+                    时光胶囊
                 </h3>
                 <div class="space-y-4">
-                    <div>
+                    <div class="group">
                         <div class="flex justify-between text-sm mb-1">
-                            <span>今日已度过</span>
-                            <span id="percent-day">0%</span>
+                            <span class="flex items-center"><i class="far fa-clock mr-1 text-xs"></i>今日已度过</span>
+                            <span class="font-mono" id="percent-day">0%</span>
                         </div>
                         <div class="progress-bar"><div class="progress-fill" id="bar-day" style="width:0%"></div></div>
                     </div>
-                    <div>
+                    <div class="group">
                         <div class="flex justify-between text-sm mb-1">
-                            <span>本周已度过</span>
-                            <span id="percent-week">0%</span>
+                            <span class="flex items-center"><i class="far fa-calendar-alt mr-1 text-xs"></i>本周已度过</span>
+                            <span class="font-mono" id="percent-week">0%</span>
                         </div>
                         <div class="progress-bar"><div class="progress-fill" id="bar-week" style="width:0%"></div></div>
                     </div>
-                    <div>
+                    <div class="group">
                         <div class="flex justify-between text-sm mb-1">
-                            <span>本月已度过</span>
-                            <span id="percent-month">0%</span>
+                            <span class="flex items-center"><i class="far fa-calendar mr-1 text-xs"></i>本月已度过</span>
+                            <span class="font-mono" id="percent-month">0%</span>
                         </div>
                         <div class="progress-bar"><div class="progress-fill" id="bar-month" style="width:0%"></div></div>
                     </div>
-                    <div>
+                    <div class="group">
                         <div class="flex justify-between text-sm mb-1">
-                            <span>今年已度过</span>
-                            <span id="percent-year">0%</span>
+                            <span class="flex items-center"><i class="far fa-calendar-alt mr-1 text-xs"></i>今年已度过</span>
+                            <span class="font-mono" id="percent-year">0%</span>
                         </div>
                         <div class="progress-bar"><div class="progress-fill" id="bar-year" style="width:0%"></div></div>
                     </div>
                 </div>
             </div>
 
+            <!-- 网站列表卡片 -->
             <div class="glass rounded-2xl p-6">
-                <h3 class="text-sm font-semibold mb-4 text-white/80">网站列表</h3>
+                <h3 class="text-sm font-semibold mb-4 text-white/80 flex items-center">
+                    <i class="fas fa-globe mr-2"></i>
+                    常用网站
+                </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
-                        <i class="fas fa-link mr-2"></i> XRCOI OJ
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-link mr-2 text-blue-300 group-hover:scale-110 transition-transform"></i>
+                        <span>XRCOI OJ</span>
                     </a>
-                    <a href="https://www.luogu.com.cn/" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
-                        <i class="fas fa-link mr-2"></i> 洛谷
+                    <a href="https://www.luogu.com.cn/" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-link mr-2 text-green-300 group-hover:scale-110 transition-transform"></i>
+                        <span>洛谷</span>
                     </a>
-                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
-                        <i class="fas fa-comments mr-2"></i> XRCOI 聊天室
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-comments mr-2 text-purple-300 group-hover:scale-110 transition-transform"></i>
+                        <span>XRCOI 聊天室</span>
                     </a>
-                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
-                        <i class="fas fa-code mr-2"></i> rgw-oj
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-code mr-2 text-yellow-300 group-hover:scale-110 transition-transform"></i>
+                        <span>rgw-oj</span>
                     </a>
-                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
-                        <i class="fas fa-video mr-2"></i> 视频播放
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-video mr-2 text-red-300 group-hover:scale-110 transition-transform"></i>
+                        <span>视频播放</span>
                     </a>
-                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-colors flex items-center">
-                        <i class="fas fa-user mr-2"></i> Cby 的主页
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-user mr-2 text-indigo-300 group-hover:scale-110 transition-transform"></i>
+                        <span>Cby 的主页</span>
                     </a>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- 页脚 -->
     <footer class="glass p-4 text-center text-sm text-white/60">
-        <p>Copyright © 2024-2026 dmc0702 & Made with ❤️</p>
+        <p>
+            <i class="far fa-copyright mr-1"></i>
+            2024-2026 dmc0702 
+            <span class="mx-2">·</span>
+            Made with <i class="fas fa-heart text-red-400 mx-1"></i> in Chongqing
+            <span class="mx-2">·</span>
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hover:text-white transition-colors">
+                <i class="fas fa-arrow-up"></i> 回到顶部
+            </button>
+        </p>
     </footer>
 </div>
 
-<button id="backToTop" class="fixed bottom-8 right-8 glass w-12 h-12 rounded-full flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-white/20">
+<!-- 回到顶部按钮（备用） -->
+<button id="backToTop" class="fixed bottom-8 right-8 glass w-12 h-12 rounded-full flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-white/20 hover:scale-110">
     <i class="fas fa-arrow-up"></i>
 </button>
 
+<!-- 设置弹窗 -->
 <div id="settingsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center hidden">
     <div class="glass rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto animate-fadeIn">
         <div class="p-6 flex justify-between items-center border-b border-white/10">
-            <h2 class="text-xl font-bold">全局设置</h2>
-            <button id="closeSettings" class="text-white/60 hover:text-white">
+            <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-cog mr-2 animate-spin-slow"></i>
+                全局设置
+            </h2>
+            <button id="closeSettings" class="text-white/60 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="p-6">
             <div class="mb-6">
-                <h3 class="text-sm font-semibold mb-3 text-white/80">个性壁纸</h3>
+                <h3 class="text-sm font-semibold mb-3 text-white/80 flex items-center">
+                    <i class="fas fa-image mr-2"></i>
+                    个性壁纸
+                </h3>
                 <div class="flex flex-wrap gap-3">
-                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-colors">默认壁纸</button>
-                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-colors">每日一图</button>
-                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-colors">随机风景</button>
-                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-colors">随机动漫</button>
+                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105">🌄 默认壁纸</button>
+                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105">📅 每日一图</button>
+                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105">🏞️ 随机风景</button>
+                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105">🎮 随机动漫</button>
                 </div>
             </div>
             <div class="mb-6">
-                <h3 class="text-sm font-semibold mb-3 text-white/80">个性化调整</h3>
-                <p class="text-sm text-white/60">更多设置开发中…</p>
+                <h3 class="text-sm font-semibold mb-3 text-white/80 flex items-center">
+                    <i class="fas fa-palette mr-2"></i>
+                    主题颜色
+                </h3>
+                <div class="flex gap-3">
+                    <button class="w-8 h-8 rounded-full bg-purple-500 hover:scale-110 transition-transform"></button>
+                    <button class="w-8 h-8 rounded-full bg-blue-500 hover:scale-110 transition-transform"></button>
+                    <button class="w-8 h-8 rounded-full bg-green-500 hover:scale-110 transition-transform"></button>
+                    <button class="w-8 h-8 rounded-full bg-red-500 hover:scale-110 transition-transform"></button>
+                    <button class="w-8 h-8 rounded-full bg-yellow-500 hover:scale-110 transition-transform"></button>
+                </div>
             </div>
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold mb-3 text-white/80 flex items-center">
+                    <i class="fas fa-sliders-h mr-2"></i>
+                    个性化调整
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span>毛玻璃效果</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-white/10 rounded-full peer peer-checked:bg-purple-500/50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span>动画效果</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-white/10 rounded-full peer peer-checked:bg-purple-500/50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <p class="text-sm text-white/60 text-center mt-6">更多功能开发中...</p>
         </div>
     </div>
 </div>
 
 <script>
-    // 时间
+    // 时间更新
     function updateTime() {
         const now = new Date();
         document.getElementById('currentTime').innerText = now.toLocaleTimeString('zh-CN', { hour12: false });
@@ -286,22 +420,41 @@
     updateCapsule();
     setInterval(updateCapsule, 60000);
 
-    // 回到顶部
+    // 回到顶部按钮显示/隐藏
     const backBtn = document.getElementById('backToTop');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 300) {
             backBtn.classList.remove('opacity-0', 'invisible');
-            backBtn.classList.add('opacity-100');
+            backBtn.classList.add('opacity-100', 'visible');
         } else {
             backBtn.classList.add('opacity-0', 'invisible');
+            backBtn.classList.remove('opacity-100', 'visible');
         }
     });
     backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // 弹窗
-    document.getElementById('closeSettings').onclick = () => {
-        document.getElementById('settingsModal').classList.add('hidden');
-    };
+    // 设置弹窗控制
+    const openSettingsBtn = document.getElementById('openSettings');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettingsBtn = document.getElementById('closeSettings');
+    
+    openSettingsBtn.addEventListener('click', () => {
+        settingsModal.classList.remove('hidden');
+        settingsModal.classList.add('flex');
+    });
+    
+    closeSettingsBtn.addEventListener('click', () => {
+        settingsModal.classList.add('hidden');
+        settingsModal.classList.remove('flex');
+    });
+    
+    // 点击弹窗外部关闭
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) {
+            settingsModal.classList.add('hidden');
+            settingsModal.classList.remove('flex');
+        }
+    });
 
     // 一言 API
     async function loadYiyan() {
@@ -316,72 +469,65 @@
         }
     }
 
-    // --- 修改点：使用新 API 获取重庆今日天气 ---
+    // 天气 API
     async function loadWeather() {
-    const weatherDescEl = document.getElementById('weatherDesc');
-    const weatherTempEl = document.getElementById('weatherTemp');
-    const weatherIconEl = document.getElementById('weatherIcon');
-    
-    weatherDescEl.innerText = '重庆 · 获取天气中...';
-    
-    try {
-        // 使用多个 CORS 代理，提高成功率
-        const proxyUrls = [
-            'https://cors-anywhere.herokuapp.com/',
-            'https://api.allorigins.win/raw?url=',
-            'https://crossorigin.me/',
-            'https://cors.bridged.cc/'
-        ];
+        const weatherDescEl = document.getElementById('weatherDesc');
+        const weatherTempEl = document.getElementById('weatherTemp');
+        const weatherIconEl = document.getElementById('weatherIcon');
         
-        const targetUrl = 'https://query.asilu.com/weather/baidu/?city=重庆';
-        let data = null;
-        let success = false;
+        weatherDescEl.innerHTML = '<i class="fas fa-map-marker-alt mr-1"></i>重庆 · 获取天气中...';
         
-        // 依次尝试每个代理
-        for (const proxy of proxyUrls) {
-            try {
-                console.log(`尝试代理: ${proxy}`);
-                const response = await fetch(proxy + targetUrl);
-                if (response.ok) {
-                    data = await response.json();
-                    success = true;
-                    console.log(`代理 ${proxy} 成功`);
-                    break;
-                }
-            } catch (e) {
-                console.log(`代理 ${proxy} 失败:`, e.message);
-                continue;
-            }
-        }
-        
-        if (!success) throw new Error('所有代理都失败');
-        
-        // 处理天气数据
-        if (data && data.weather && data.weather.length > 0) {
-            const today = data.weather[0];
-            weatherDescEl.innerText = `重庆 · ${today.weather}`;
-            weatherTempEl.innerText = today.temp;
+        try {
+            const proxyUrls = [
+                'https://api.allorigins.win/raw?url=',
+                'https://cors-anywhere.herokuapp.com/',
+                'https://crossorigin.me/'
+            ];
             
-            const condition = today.weather;
-            if (condition.includes('雨')) {
-                weatherIconEl.className = 'fas fa-cloud-rain text-4xl text-white/60 mr-3';
-            } else if (condition.includes('云') || condition.includes('阴')) {
-                weatherIconEl.className = 'fas fa-cloud-sun text-4xl text-white/60 mr-3';
-            } else if (condition.includes('晴')) {
-                weatherIconEl.className = 'fas fa-sun text-4xl text-white/60 mr-3';
-            } else {
-                weatherIconEl.className = 'fas fa-cloud-sun text-4xl text-white/60 mr-3';
+            const targetUrl = 'https://query.asilu.com/weather/baidu/?city=重庆';
+            let data = null;
+            let success = false;
+            
+            for (const proxy of proxyUrls) {
+                try {
+                    const response = await fetch(proxy + encodeURIComponent(targetUrl));
+                    if (response.ok) {
+                        data = await response.json();
+                        success = true;
+                        break;
+                    }
+                } catch (e) {
+                    continue;
+                }
             }
-        } else {
-            throw new Error('数据格式错误');
+            
+            if (!success) throw new Error('所有代理都失败');
+            
+            if (data && data.weather && data.weather.length > 0) {
+                const today = data.weather[0];
+                weatherDescEl.innerHTML = `<i class="fas fa-map-marker-alt mr-1"></i>重庆 · ${today.weather}`;
+                weatherTempEl.innerText = today.temp;
+                
+                const condition = today.weather;
+                if (condition.includes('雨')) {
+                    weatherIconEl.className = 'fas fa-cloud-rain text-5xl text-white/60 mr-4 animate-pulse-slow';
+                } else if (condition.includes('云') || condition.includes('阴')) {
+                    weatherIconEl.className = 'fas fa-cloud-sun text-5xl text-white/60 mr-4 animate-pulse-slow';
+                } else if (condition.includes('晴')) {
+                    weatherIconEl.className = 'fas fa-sun text-5xl text-white/60 mr-4 animate-pulse-slow';
+                } else {
+                    weatherIconEl.className = 'fas fa-cloud-sun text-5xl text-white/60 mr-4 animate-pulse-slow';
+                }
+            } else {
+                throw new Error('数据格式错误');
+            }
+        } catch (e) {
+            console.error('天气加载失败:', e);
+            weatherDescEl.innerHTML = '<i class="fas fa-map-marker-alt mr-1"></i>重庆 · 无法获取天气信息';
+            weatherTempEl.innerText = '--°C';
+            weatherIconEl.className = 'fas fa-cloud-sun text-5xl text-white/60 mr-4 animate-pulse-slow';
         }
-    } catch (e) {
-        console.error('天气加载失败:', e);
-        weatherDescEl.innerText = '重庆 · 无法获取天气信息';
-        weatherTempEl.innerText = '--°C';
-        weatherIconEl.className = 'fas fa-cloud-sun text-4xl text-white/60 mr-3';
     }
-}
 
     // 页面加载时执行
     window.onload = () => {
