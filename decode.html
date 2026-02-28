@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TextImage解密 - 文本加密为彩色图片工具</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 导航区 -->
+        <header class="header">
+            <div class="logo">TextImage<span>解密</span></div>
+            <nav class="nav">
+                <button class="nav-btn active" data-tab="encrypt">加密</button>
+                <button class="nav-btn" data-tab="decrypt">解密</button>
+                <button class="nav-btn" data-tab="help">帮助</button>
+            </nav>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 加密模块 -->
+            <section id="encrypt-section" class="section active">
+                <div class="input-area">
+                    <div class="input-group">
+                        <label for="visible-text">明面文本：</label>
+                        <textarea id="visible-text" placeholder="请输入要显示在图片上的文本（将明文显示）"></textarea>
+                        <div class="input-actions">
+                            <button id="clear-visible" class="action-btn">清空</button>
+                            <button id="copy-visible" class="action-btn">复制</button>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="hidden-text">隐藏文本：</label>
+                        <textarea id="hidden-text" placeholder="请输入要隐藏在图片中的文本（将加密隐藏）"></textarea>
+                        <div class="input-actions">
+                            <button id="clear-hidden" class="action-btn">清空</button>
+                            <button id="copy-hidden" class="action-btn">复制</button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <label for="image-width">图片宽度：</label>
+                            <input type="number" id="image-width" min="300" max="2000" value="800">
+                            <span class="unit">px</span>
+                        </div>
+                        <div class="setting-item">
+                            <label for="image-height">图片高度：</label>
+                            <input type="number" id="image-height" min="300" max="2000" value="600">
+                            <span class="unit">px</span>
+                        </div>
+                    </div>
+                    
+                    <button id="generate-btn" class="primary-btn">生成图片</button>
+                </div>
+                
+                <div class="preview-area">
+                    <h3>预览</h3>
+                    <div class="preview-container">
+                        <canvas id="preview-canvas"></canvas>
+                        <div id="preview-placeholder" class="placeholder">
+                            <p>生成的图片将在这里显示</p>
+                        </div>
+                    </div>
+                    <div class="preview-actions">
+                        <button id="download-btn" class="secondary-btn" disabled>下载图片</button>
+                        <button id="reset-preview-btn" class="secondary-btn" disabled>重置</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 解密模块 -->
+            <section id="decrypt-section" class="section">
+                <div class="input-area">
+                    <div class="upload-group">
+                        <label for="image-upload">上传加密图片：</label>
+                        <div class="upload-container">
+                            <input type="file" id="image-upload" accept="image/png">
+                            <div class="upload-placeholder">
+                                <p>点击或拖拽图片到此处上传</p>
+                                <p class="hint">支持PNG格式图片</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="decrypt-btn" class="primary-btn" disabled>解密文本</button>
+                </div>
+                
+                <div class="result-area">
+                    <h3>解密结果</h3>
+                    <div class="result-container">
+                        <textarea id="decrypted-text" placeholder="解密后的文本将在这里显示" readonly></textarea>
+                        <div id="decrypt-placeholder" class="placeholder">
+                            <p>解密的文本将在这里显示</p>
+                        </div>
+                    </div>
+                    <div class="result-actions">
+                        <button id="copy-decrypted" class="action-btn" disabled>复制</button>
+                        <button id="clear-decrypted" class="action-btn" disabled>清空</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 帮助模块 -->
+            <section id="help-section" class="section">
+                <div class="help-content">
+                    <h2>使用帮助</h2>
+                    
+                    <div class="help-section">
+                        <h3>什么是TextImage加密？</h3>
+                        <p>TextImage加密是一种将文本信息隐藏在图片中的技术。您可以创建包含明面文本（直接可见）和隐藏文本（加密嵌入）的彩色图片。</p>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>加密功能使用方法</h3>
+                        <ol>
+                            <li>在"明面文本"框中输入您希望直接显示在图片上的文本</li>
+                            <li>在"隐藏文本"框中输入您希望加密隐藏的文本</li>
+                            <li>设置图片的宽度和高度（建议最小值为300x300像素）</li>
+                            <li>点击"生成图片"按钮</li>
+                            <li>预览生成的图片，确认无误后点击"下载图片"保存</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>解密功能使用方法</h3>
+                        <ol>
+                            <li>点击"上传加密图片"区域，选择您之前生成的PNG图片</li>
+                            <li>点击"解密文本"按钮</li>
+                            <li>系统将从图片中提取并显示隐藏的文本</li>
+                            <li>您可以复制解密后的文本或清空结果</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>技术原理</h3>
+                        <p>本工具使用了一种基于像素操作的隐写术（Steganography）技术。隐藏文本经过加密算法处理后，以人眼无法察觉的方式修改图片中像素的RGB值。这些修改非常微小，不会明显影响图片的视觉效果，但足以存储和传输隐藏信息。</p>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>注意事项</h3>
+                        <ul>
+                            <li>请确保生成的图片以PNG格式保存，其他格式可能会导致隐藏信息丢失</li>
+                            <li>对图片进行编辑、压缩或格式转换可能会损坏隐藏的信息</li>
+                            <li>隐藏文本的长度受限于图片的尺寸，较大的图片可以存储更多信息</li>
+                            <li>为了获得最佳效果，建议隐藏文本不要超过图片可存储容量的50%</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 状态提示区 -->
+        <div id="status-message" class="status-message"></div>
+    </div>
+
+    <!-- 加载动画 -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+        <p id="loading-text">处理中...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
