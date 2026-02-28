@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dmc0702 · 主页介绍</title>
+    <title>dmc0702 - 个人主页</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -102,16 +102,22 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.5);
         }
-        /* 介绍卡片文字样式 */
-        .intro-text {
-            line-height: 1.8;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        /* 个人介绍文字样式 */
+        .bio-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .bio-text.expanded {
+            -webkit-line-clamp: unset;
         }
     </style>
 </head>
 <body class="min-h-screen text-white">
 <div class="min-h-screen flex flex-col">
-    <!-- 导航栏 - 完全保留 -->
+    <!-- 导航栏 - 添加设置按钮 -->
     <nav class="glass p-4 flex justify-between items-center sticky top-0 z-40">
         <div class="flex items-center space-x-4">
             <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 hover:border-white/40 transition-all duration-300">
@@ -120,7 +126,7 @@
             <h1 class="text-3xl font-bold tracking-tight" style="font-family: 'Pacifico', cursive;">dmc0702</h1>
         </div>
         <div class="flex space-x-4">
-            <!-- 设置按钮 -->
+            <!-- 设置按钮 - 现在可见了 -->
             <button id="openSettings" class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
                 <i class="fas fa-cog text-xl"></i>
                 <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">设置</span>
@@ -137,9 +143,9 @@
     </nav>
 
     <main class="flex-1 p-8 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto w-full">
-        <!-- 左侧栏 - 只保留每日一言 (去掉了快捷链接和小工具) -->
+        <!-- 左侧栏 -->
         <div class="md:col-span-1 space-y-6">
-            <!-- 每日一言卡片 (完整保留) -->
+            <!-- 每日一言卡片 -->
             <div class="glass rounded-2xl p-6 relative overflow-hidden group hover:border-white/20 transition-all duration-300">
                 <span class="quote-mark left">“</span>
                 <div class="yiyan-wrap">
@@ -156,42 +162,104 @@
                 <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
             </div>
 
-            <!-- ⭐ 新增的个人介绍卡片 (替代原来的快捷链接和小工具) -->
+            <!-- ===== 新增：个人介绍卡片 ===== -->
             <div class="glass rounded-2xl p-6">
                 <h3 class="text-sm font-semibold mb-4 text-white/80 flex items-center">
-                    <i class="fas fa-user-astronaut mr-2"></i>
+                    <i class="fas fa-user-circle mr-2 text-blue-300"></i>
                     关于我
                 </h3>
-                <div class="intro-text space-y-3 text-white/80">
-                    <p class="flex items-start gap-2">
-                        <i class="fas fa-code text-blue-300 mt-1"></i>
-                        <span>主业写代码，副业折腾服务器，偶尔在洛谷出没。</span>
-                    </p>
-                    <p class="flex items-start gap-2">
-                        <i class="fas fa-location-dot text-green-300 mt-1"></i>
-                        <span>坐标重庆 · 喜欢探索有趣的前端交互和轻量级应用。</span>
-                    </p>
-                    <p class="flex items-start gap-2">
-                        <i class="fas fa-mug-hot text-yellow-300 mt-1"></i>
-                        <span>保持热爱，奔赴山海。相信简洁的代码也能有温度。</span>
-                    </p>
-                    <p class="flex items-start gap-2">
-                        <i class="fas fa-rocket text-purple-300 mt-1"></i>
-                        <span>目前正在学习 Rust 和 WebAssembly，希望能做些好玩的工具。</span>
-                    </p>
-                    <div class="pt-3 flex justify-around text-2xl text-white/40">
-                        <i class="fab fa-js hover:text-yellow-300 transition-colors cursor-pointer"></i>
-                        <i class="fab fa-python hover:text-blue-300 transition-colors cursor-pointer"></i>
-                        <i class="fab fa-linux hover:text-gray-300 transition-colors cursor-pointer"></i>
-                        <i class="fas fa-heart hover:text-red-400 transition-colors cursor-pointer"></i>
+                <div class="flex flex-col items-center text-center">
+                    <!-- 头像（可以换成你自己的） -->
+                    <div class="w-24 h-24 rounded-full overflow-hidden border-3 border-white/30 mb-3 shadow-lg">
+                        <img src="https://cdn.luogu.com.cn/upload/usericon/1048333.png" class="w-full h-full object-cover">
                     </div>
+                    <!-- 昵称和标签 -->
+                    <h4 class="text-xl font-bold" style="font-family: 'Pacifico', cursive;">dmc0702</h4>
+                    <p class="text-xs text-white/50 mb-2">@dmc0702 · 重庆</p>
+                    <div class="flex gap-2 mb-3">
+                        <span class="px-2 py-0.5 bg-white/10 rounded-full text-xs">学生</span>
+                        <span class="px-2 py-0.5 bg-white/10 rounded-full text-xs">开发者</span>
+                        <span class="px-2 py-0.5 bg-white/10 rounded-full text-xs">OIer</span>
+                    </div>
+                    <!-- 个人介绍文字（可编辑） -->
+                    <div class="text-sm text-white/80 leading-relaxed mb-3">
+                        <p id="bioText" class="bio-text">
+                            你好呀！我是 dmc0702，一名热爱编程和算法的学生。<br>
+                            喜欢研究各种新技术，也喜欢在洛谷上刷题。<br>
+                            这个个人主页记录了我的学习历程和日常分享。<br>
+                            希望能和大家一起交流进步！<br>
+                            欢迎通过上面的快捷链接联系我~
+                        </p>
+                    </div>
+                    <!-- 展开/折叠按钮（当文字较多时使用） -->
+                    <button id="toggleBio" class="text-xs text-white/50 hover:text-white transition-colors flex items-center gap-1">
+                        <span>展开阅读更多</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <!-- 社交统计（可选） -->
+                    <div class="flex justify-around w-full mt-4 pt-3 border-t border-white/10">
+                        <div class="text-center">
+                            <div class="text-lg font-bold">23</div>
+                            <div class="text-xs text-white/50">文章</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-lg font-bold">189</div>
+                            <div class="text-xs text-white/50">粉丝</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-lg font-bold">1.2k</div>
+                            <div class="text-xs text-white/50">获赞</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 快捷链接卡片 -->
+            <div class="glass rounded-2xl p-6">
+                <h3 class="text-sm font-semibold mb-4 text-white/80 flex items-center">
+                    <i class="fas fa-link mr-2"></i>
+                    快捷链接
+                </h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="https://dmcforum.freeflarum.com/" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-all duration-300 group">
+                        <i class="fas fa-comments mr-2 text-blue-300 group-hover:text-blue-200"></i>
+                        <span class="text-sm">Digo</span>
+                    </a>
+                    <a href="https://www.luogu.com.cn/user/1048333/article" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-all duration-300 group">
+                        <i class="fas fa-blog mr-2 text-green-300 group-hover:text-green-200"></i>
+                        <span class="text-sm">博客</span>
+                    </a>
+                    <a href="https://becoder.com.cn/loginpromote/14083/b98ceeec22/dcad1b92651abdcaeccd41f1323953348d19eaa3255bab374a67505b23c4f56e/1772244678686" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-all duration-300 group">
+                        <i class="fas fa-code mr-2 text-purple-300 group-hover:text-purple-200"></i>
+                        <span class="text-sm">必可</span>
+                    </a>
+                    <a href="https://www.luogu.com.cn/user/1048333" target="_blank" rel="noopener" class="glass p-3 rounded-xl text-center hover:bg-white/10 transition-all duration-300 group">
+                        <i class="fas fa-user mr-2 text-yellow-300 group-hover:text-yellow-200"></i>
+                        <span class="text-sm">联系我</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 小工具卡片 -->
+            <div class="glass rounded-2xl p-6">
+                <h3 class="text-sm font-semibold mb-4 text-white/80 flex items-center">
+                    <i class="fas fa-tools mr-2"></i>
+                    小工具
+                </h3>
+                <div class="space-y-2">
+                    <button onclick="window.open('https://www.baidu.com', '_blank')" class="w-full glass p-2 rounded-lg text-sm hover:bg-white/10 transition-all duration-300 flex items-center justify-center">
+                        <i class="fas fa-search mr-2"></i> 百度搜索
+                    </button>
+                    <button onclick="window.open('https://fanyi.baidu.com', '_blank')" class="w-full glass p-2 rounded-lg text-sm hover:bg-white/10 transition-all duration-300 flex items-center justify-center">
+                        <i class="fas fa-language mr-2"></i> 百度翻译
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- 右侧主内容区 - 去掉了“广告位”，但保留了时间和天气，以及时光胶囊（按照要求：时光胶囊也被移除，所以这里只保留时间天气卡片） -->
+        <!-- 右侧主内容区 -->
         <div class="md:col-span-2 space-y-6">
-            <!-- 时间天气卡片 (完整保留) -->
+            <!-- 时间天气卡片 -->
             <div class="glass rounded-2xl p-6 hover:border-white/20 transition-all duration-300">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div>
@@ -215,37 +283,81 @@
                 </div>
             </div>
 
-            <!-- ⭐ 原本的“时光胶囊”卡片已完全移除 -->
-            <!-- ⭐ 原本的“广告位”卡片已完全移除 -->
+            <!-- 时光胶囊卡片 -->
+            <div class="glass rounded-2xl p-6">
+                <h3 class="text-sm font-semibold mb-4 flex items-center">
+                    <i class="fas fa-hourglass-half mr-2 text-yellow-300"></i>
+                    时光胶囊
+                </h3>
+                <div class="space-y-4">
+                    <div class="group">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="flex items-center"><i class="far fa-clock mr-1 text-xs"></i>今日已度过</span>
+                            <span class="font-mono" id="percent-day">0%</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="bar-day" style="width:0%"></div></div>
+                    </div>
+                    <div class="group">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="flex items-center"><i class="far fa-calendar-alt mr-1 text-xs"></i>本周已度过</span>
+                            <span class="font-mono" id="percent-week">0%</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="bar-week" style="width:0%"></div></div>
+                    </div>
+                    <div class="group">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="flex items-center"><i class="far fa-calendar mr-1 text-xs"></i>本月已度过</span>
+                            <span class="font-mono" id="percent-month">0%</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="bar-month" style="width:0%"></div></div>
+                    </div>
+                    <div class="group">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="flex items-center"><i class="far fa-calendar-alt mr-1 text-xs"></i>今年已度过</span>
+                            <span class="font-mono" id="percent-year">0%</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="bar-year" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
 
-            <!-- 为了视觉平衡，增加一个简洁的足迹卡片 (纯装饰，也可以删掉，但加上更充实) 如果不想要可以删去，这里放一个轻量的小卡片填补空白 -->
+            <!-- 网站列表卡片（广告位） -->
             <div class="glass rounded-2xl p-6">
                 <h3 class="text-sm font-semibold mb-4 text-white/80 flex items-center">
-                    <i class="fas fa-map-signs mr-2"></i>
-                    最近动态
+                    <i class="fas fa-globe mr-2"></i>
+                    广告位
                 </h3>
-                <div class="space-y-2 text-white/70">
-                    <div class="flex items-center gap-3 text-sm">
-                        <span class="w-2 h-2 bg-green-400 rounded-full"></span>
-                        <span>更新了个人主页介绍</span>
-                        <span class="text-white/30 text-xs ml-auto">今天</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm">
-                        <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
-                        <span>在洛谷发布了一篇题解</span>
-                        <span class="text-white/30 text-xs ml-auto">3天前</span>
-                    </div>
-                    <div class="flex items-center gap-3 text-sm">
-                        <span class="w-2 h-2 bg-purple-400 rounded-full"></span>
-                        <span>折腾了一个新的小项目</span>
-                        <span class="text-white/30 text-xs ml-auto">上周</span>
-                    </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <a href="https://dmc0702.github.io/decode" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-link mr-2 text-blue-300 group-hover:scale-110 transition-transform"></i>
+                        <span>加密</span>
+                    </a>
+                    <a href="https://www.luogu.com.cn/" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-link mr-2 text-green-300 group-hover:scale-110 transition-transform"></i>
+                        <span>洛谷</span>
+                    </a>
+                    <a href="https://www.luogu.com.cn/team/99804" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-comments mr-2 text-purple-300 group-hover:scale-110 transition-transform"></i>
+                        <span>c++网盘小群</span>
+                    </a>
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-code mr-2 text-yellow-300 group-hover:scale-110 transition-transform"></i>
+                        <span>asd</span>
+                    </a>
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-video mr-2 text-red-300 group-hover:scale-110 transition-transform"></i>
+                        <span>asd</span>
+                    </a>
+                    <a href="#" class="glass p-4 rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center group">
+                        <i class="fas fa-user mr-2 text-indigo-300 group-hover:scale-110 transition-transform"></i>
+                        <span>asd</span>
+                    </a>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- 页脚 (完全保留) -->
+    <!-- 页脚 -->
     <footer class="glass p-4 text-center text-sm text-white/60">
         <p>
             <i class="far fa-copyright mr-1"></i>
@@ -265,7 +377,7 @@
     <i class="fas fa-arrow-up"></i>
 </button>
 
-<!-- 设置弹窗 (功能保留) -->
+<!-- 设置弹窗 -->
 <div id="settingsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center hidden">
     <div class="glass rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto animate-fadeIn">
         <div class="p-6 flex justify-between items-center border-b border-white/10">
@@ -342,7 +454,30 @@
     setInterval(updateTime, 1000);
     updateTime();
 
-    // 时光胶囊功能完全移除，因此不再调用updateCapsule及相关代码
+    // 时光胶囊进度
+    function updateCapsule() {
+        const now = new Date();
+        const d = now.getDate();
+        const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        const dayPercent = ((now - dayStart) / 86400000 * 100).toFixed(1);
+        const weekPercent = (((now.getDay() || 7) - 1) * 100 / 6).toFixed(1);
+        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        const monthPercent = (d / daysInMonth * 100).toFixed(1);
+        const yearStart = new Date(now.getFullYear(), 0, 1).getTime();
+        const yearTotal = new Date(now.getFullYear() + 1, 0, 1).getTime() - yearStart;
+        const yearPercent = ((now - yearStart) / yearTotal * 100).toFixed(1);
+
+        document.getElementById('percent-day').innerText = dayPercent + '%';
+        document.getElementById('bar-day').style.width = dayPercent + '%';
+        document.getElementById('percent-week').innerText = weekPercent + '%';
+        document.getElementById('bar-week').style.width = weekPercent + '%';
+        document.getElementById('percent-month').innerText = monthPercent + '%';
+        document.getElementById('bar-month').style.width = monthPercent + '%';
+        document.getElementById('percent-year').innerText = yearPercent + '%';
+        document.getElementById('bar-year').style.width = yearPercent + '%';
+    }
+    updateCapsule();
+    setInterval(updateCapsule, 60000);
 
     // 回到顶部按钮显示/隐藏
     const backBtn = document.getElementById('backToTop');
@@ -393,7 +528,7 @@
         }
     }
 
-    // 天气 API (完全保留)
+    // 天气 API
     async function loadWeather() {
         const weatherDescEl = document.getElementById('weatherDesc');
         const weatherTempEl = document.getElementById('weatherTemp');
@@ -452,6 +587,23 @@
             weatherIconEl.className = 'fas fa-cloud-sun text-5xl text-white/60 mr-4 animate-pulse-slow';
         }
     }
+
+    // 个人介绍展开/折叠功能
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('toggleBio');
+        const bioText = document.getElementById('bioText');
+        let isExpanded = false;
+        
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function() {
+                isExpanded = !isExpanded;
+                bioText.classList.toggle('expanded');
+                toggleBtn.innerHTML = isExpanded ? 
+                    '<span>收起</span><i class="fas fa-chevron-up text-xs"></i>' : 
+                    '<span>展开阅读更多</span><i class="fas fa-chevron-down text-xs"></i>';
+            });
+        }
+    });
 
     // 页面加载时执行
     window.onload = () => {
