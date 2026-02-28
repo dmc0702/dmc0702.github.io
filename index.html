@@ -16,6 +16,7 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            transition: background-image 0.5s ease;
         }
         .glass {
             background: rgba(255, 255, 255, 0.05);
@@ -112,6 +113,11 @@
         }
         .bio-text.expanded {
             -webkit-line-clamp: unset;
+        }
+        /* 壁纸按钮选中状态 */
+        .wallpaper-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
@@ -466,7 +472,7 @@
     <i class="fas fa-arrow-up"></i>
 </button>
 
-<!-- 设置弹窗 -->
+<!-- 设置弹窗（已实现壁纸功能） -->
 <div id="settingsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center hidden">
     <div class="glass rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto animate-fadeIn">
         <div class="p-6 flex justify-between items-center border-b border-white/10">
@@ -485,10 +491,10 @@
                     个性壁纸
                 </h3>
                 <div class="flex flex-wrap gap-3">
-                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105">🌄 默认壁纸</button>
-                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105">📅 每日一图</button>
-                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105">🏞️ 随机风景</button>
-                    <button class="px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105">🎮 随机动漫</button>
+                    <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="default">🌄 默认壁纸</button>
+                    <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="daily">📅 每日一图</button>
+                    <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="scenery">🏞️ 随机风景</button>
+                    <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="anime">🎮 随机动漫</button>
                 </div>
             </div>
             <div class="mb-6">
@@ -532,6 +538,48 @@
 </div>
 
 <script>
+    // ===== 壁纸功能实现 =====
+    (function() {
+        // 壁纸URL映射
+        const wallpapers = {
+            default: 'https://picsum.photos/id/1036/1920/1080', // 默认壁纸
+            daily: 'https://picsum.photos/1920/1080?random&' + new Date().toDateString(), // 每日一图（每天不同）
+            scenery: 'https://picsum.photos/1920/1080?random=1&' + Math.random(), // 随机风景
+            anime: 'https://picsum.photos/1920/1080?random=2&' + Math.random() // 随机动漫（这里也用Lorem Picsum，因为它是免费图片）
+        };
+
+        // 获取保存的壁纸设置
+        const savedWallpaper = localStorage.getItem('wallpaper_dmc') || 'default';
+        
+        // 应用保存的壁纸
+        function applyWallpaper(type) {
+            document.body.style.backgroundImage = `url('${wallpapers[type]}')`;
+            localStorage.setItem('wallpaper_dmc', type);
+            
+            // 更新按钮选中状态
+            document.querySelectorAll('.wallpaper-btn').forEach(btn => {
+                if (btn.dataset.wallpaper === type) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // 页面加载时应用保存的壁纸
+        window.addEventListener('load', () => {
+            applyWallpaper(savedWallpaper);
+        });
+
+        // 为壁纸按钮添加点击事件
+        document.querySelectorAll('.wallpaper-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const type = this.dataset.wallpaper;
+                applyWallpaper(type);
+            });
+        });
+    })();
+
     // 时间更新
     function updateTime() {
         const now = new Date();
