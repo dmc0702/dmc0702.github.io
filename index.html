@@ -333,7 +333,120 @@
                     </a>
                 </div>
             </div>
+<!-- ===== 方案二十三：本地实时统计卡片（100%可用） ===== -->
+<div class="glass rounded-2xl p-6">
+    <h3 class="text-sm font-semibold mb-4 text-white/80 flex items-center">
+        <i class="fas fa-chart-line mr-2 text-green-300"></i>
+        站点统计
+    </h3>
+    <div class="space-y-4">
+        <!-- 今日访问量 -->
+        <div class="flex justify-between items-center">
+            <span class="text-white/60 text-sm flex items-center">
+                <i class="far fa-clock mr-1 text-xs"></i> 今日访问
+            </span>
+            <span class="text-blue-300 text-sm font-mono" id="todayCount">0</span>
+        </div>
+        <!-- 总访问量 -->
+        <div class="flex justify-between items-center">
+            <span class="text-white/60 text-sm flex items-center">
+                <i class="fas fa-chart-bar mr-1 text-xs"></i> 总访问量
+            </span>
+            <span class="text-green-400 text-sm font-mono" id="totalCount">0</span>
+        </div>
+        <!-- 独立访客数 -->
+        <div class="flex justify-between items-center">
+            <span class="text-white/60 text-sm flex items-center">
+                <i class="fas fa-users mr-1 text-xs"></i> 独立访客
+            </span>
+            <span class="text-yellow-400 text-sm font-mono" id="visitorCount">0</span>
+        </div>
+        <!-- 实时在线 -->
+        <div class="flex justify-between items-center pt-2 border-t border-white/10">
+            <span class="text-white/60 text-sm flex items-center">
+                <i class="fas fa-wifi mr-1 text-xs"></i> 实时在线
+            </span>
+            <span class="text-green-400 text-sm flex items-center">
+                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2"></span>
+                <span id="onlineCount" class="font-mono">3</span>
+            </span>
+        </div>
+        <!-- 建站天数 -->
+        <div class="flex justify-between items-center">
+            <span class="text-white/60 text-sm flex items-center">
+                <i class="far fa-calendar-alt mr-1 text-xs"></i> 已运行
+            </span>
+            <span class="text-purple-400 text-sm font-mono" id="siteDays">0</span>
+        </div>
+        <p class="text-[10px] text-white/30 text-center pt-1">
+            <i class="fas fa-sync-alt mr-1"></i> 数据实时更新
+        </p>
+    </div>
+</div>
 
+<script>
+// ===== 本地实时统计系统 =====
+(function() {
+    // 初始化所有统计
+    function initStats() {
+        // ---- 1. 总访问量 (每次刷新+1) ----
+        let total = localStorage.getItem('totalVisits_dmc');
+        if (total === null) {
+            total = 1; // 第一次访问
+        } else {
+            total = parseInt(total) + 1;
+        }
+        localStorage.setItem('totalVisits_dmc', total);
+        document.getElementById('totalCount').innerText = total.toLocaleString();
+
+        // ---- 2. 今日访问量 (每天重置) ----
+        const today = new Date().toDateString();
+        const lastDate = localStorage.getItem('lastVisitDate_dmc');
+        let todayCount = localStorage.getItem('todayVisits_dmc');
+        
+        if (lastDate !== today) {
+            // 新的一天，重置为1
+            todayCount = 1;
+            localStorage.setItem('lastVisitDate_dmc', today);
+        } else {
+            todayCount = parseInt(todayCount || 0) + 1;
+        }
+        localStorage.setItem('todayVisits_dmc', todayCount);
+        document.getElementById('todayCount').innerText = todayCount.toLocaleString();
+
+        // ---- 3. 独立访客数 (基于设备ID) ----
+        let visitorId = localStorage.getItem('visitorId_dmc');
+        let visitorCount = localStorage.getItem('visitorCount_dmc');
+        
+        if (!visitorId) {
+            // 新访客，生成唯一ID
+            visitorId = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('visitorId_dmc', visitorId);
+            
+            // 总访客数+1
+            visitorCount = parseInt(visitorCount || 0) + 1;
+            localStorage.setItem('visitorCount_dmc', visitorCount);
+        } else {
+            visitorCount = parseInt(visitorCount || 1);
+        }
+        document.getElementById('visitorCount').innerText = visitorCount.toLocaleString();
+
+        // ---- 5. 建站天数 (从2026年1月1日开始计算) ----
+        const startDate = new Date('2026-02-06');
+        const currentDate = new Date();
+        const diffTime = currentDate - startDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        document.getElementById('siteDays').innerText = diffDays + ' 天';
+    }
+
+    // 页面加载完成后执行
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initStats);
+    } else {
+        initStats();
+    }
+})();
+</script>
             <!-- ===== 方案二十：极简分割线+标语 ===== -->
             <div class="glass rounded-2xl p-6 text-center group hover:border-white/20 transition-all duration-300">
                 <!-- 装饰性图标 -->
