@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>课程资料 · 列表</title>
+    <title>PDF列表</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -92,7 +92,7 @@
 <body class="min-h-screen text-white">
 <div class="min-h-screen flex flex-col">
 
-    <!-- 导航栏 (简化，保留头像和标题) -->
+    <!-- 导航栏 -->
     <nav class="glass p-4 flex justify-between items-center sticky top-0 z-40">
         <div class="flex items-center space-x-4">
             <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 hover:border-white/40 transition-all duration-300">
@@ -105,7 +105,7 @@
                 <i class="fas fa-cog text-xl"></i>
                 <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">壁纸</span>
             </button>
-            <!-- 返回主页按钮 (链接到 dmc0702.github.io) -->
+            <!-- 返回主页按钮 -->
             <a href="https://dmc0702.github.io" target="_blank" rel="noopener" class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
                 <i class="fas fa-home text-xl"></i>
                 <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">返回主页</span>
@@ -134,7 +134,7 @@
 
             <!-- 动态生成的列表网格 -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="pdf-list-container">
-                <!-- 列表将由 JavaScript 动态生成，以保证链接准确且可维护 -->
+                <!-- 列表将由 JavaScript 动态生成 -->
             </div>
 
             <!-- 底部装饰 -->
@@ -147,7 +147,7 @@
             </div>
         </div>
 
-        <!-- 额外的返回主页按钮 (备用的文本按钮) -->
+        <!-- 额外的返回主页按钮 -->
         <div class="glass rounded-2xl p-5 mt-6 text-center flex justify-center items-center gap-4">
             <i class="fas fa-arrow-left text-green-300/60"></i>
             <a href="https://dmc0702.github.io" target="_blank" rel="noopener" class="text-white/80 hover:text-white transition-colors underline decoration-white/30 underline-offset-4">
@@ -177,7 +177,7 @@
     <i class="fas fa-arrow-up"></i>
 </button>
 
-<!-- 壁纸设置弹窗 (保留原功能) -->
+<!-- 壁纸设置弹窗 -->
 <div id="settingsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center hidden">
     <div class="glass rounded-2xl w-full max-w-2xl animate-fadeIn">
         <div class="p-6 flex justify-between items-center border-b border-white/10">
@@ -203,7 +203,7 @@
 </div>
 
 <script>
-    // ===== 1. 核心数据：您提供的所有 PDF 链接（已整理为对象数组）=====
+    // ===== 1. 核心数据：已删除 nullfile.txt =====
     const pdfFiles = [
         { name: "Convex Hull Trick", file: "Convex Hull Trick.pdf" },
         { name: "Count DP", file: "Count DP.pdf" },
@@ -215,10 +215,9 @@
         { name: "Monotonic+Queue+Optimization", file: "Monotonic+Queue+Optimization.pdf" },
         { name: "Quadrangle Inequality Optimization", file: "Quadrangle Inequality Optimization.pdf" },
         { name: "Scapegoat Tree", file: "Scapegoat Tree.pdf" },
-        { name: "Splay Tree", file: "Splay+Tree.pdf" },          // 文件名含+，已保留
+        { name: "Splay Tree", file: "Splay+Tree.pdf" },
         { name: "Treap Tree", file: "Treap Tree.pdf" },
         { name: "Tree Dynamic Programming", file: "Tree Dynamic Programming.pdf" },
-        { name: "nullfile", file: "nullfile.txt" },              // 文本文件，保留原始链接
         { name: "扫描线与离线知识复习", file: "扫描线与离线知识复习.pdf" },
         { name: "树链剖分", file: "树链剖分.pdf" },
         { name: "线段树", file: "线段树.pdf" }
@@ -227,13 +226,10 @@
     // 基础 URL
     const baseUrl = "https://dmc0702.github.io/courseware/";
 
-    // 更新卡片总数显示 (两个地方)
+    // 更新计数显示
     function updateCountDisplay() {
-        const countSpans = document.querySelectorAll('#pdf-list-container ~ .flex .text-xs, h2 .rounded-full');
-        // 简单处理：直接设置 h2 旁边的计数
         const h2Count = document.querySelector('h2 .rounded-full');
         if (h2Count) h2Count.innerText = pdfFiles.length + '个文件';
-        // 底部装饰计数
         const footerCount = document.querySelector('.flex.justify-center.gap-2 .text-xs.px-2');
         if (footerCount) footerCount.innerText = `共 ${pdfFiles.length} 份讲义`;
     }
@@ -245,21 +241,18 @@
 
         let htmlStr = '';
         pdfFiles.forEach(item => {
-            // 对文件名进行编码，保留特殊字符如 + 和中文，但空格等需处理
-            // 直接使用 encodeURIComponent 编码整个文件名，但注意 URL 中路径部分不应编码，只编码文件名
             const encodedFile = encodeURIComponent(item.file);
             const fullUrl = baseUrl + encodedFile;
             
-            // 根据文件扩展名显示不同图标
-            const isPdf = item.file.toLowerCase().endsWith('.pdf');
-            const iconClass = isPdf ? 'fa-file-pdf text-red-300' : 'fa-file-alt text-gray-300';
+            // 所有文件都是PDF（根据实际，保留判断但默认PDF）
+            const iconClass = 'fa-file-pdf text-red-300';
             
             htmlStr += `
                 <div class="list-item group">
                     <i class="fas ${iconClass}"></i>
                     <span class="title" title="${item.name}">${item.name}</span>
                     <a href="${fullUrl}" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
-                        ${isPdf ? 'PDF' : 'TXT'} <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                        PDF <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
                     </a>
                 </div>
             `;
@@ -268,7 +261,7 @@
         updateCountDisplay();
     }
 
-    // ===== 3. 壁纸功能 (完全保留原逻辑) =====
+    // ===== 3. 壁纸功能 =====
     (function() {
         const wallpapers = {
             default: 'https://picsum.photos/id/1036/1920/1080',
@@ -292,10 +285,9 @@
 
         window.addEventListener('load', () => {
             applyWallpaper(savedWallpaper);
-            renderPdfList();  // 渲染列表
+            renderPdfList();
         });
 
-        // 为壁纸按钮添加事件 (需等待DOM)
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('wallpaper-btn') || e.target.closest('.wallpaper-btn')) {
                 const btn = e.target.closest('.wallpaper-btn');
@@ -319,7 +311,6 @@
     });
     backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // 设置弹窗
     const openSettingsBtn = document.getElementById('openSettings');
     const settingsModal = document.getElementById('settingsModal');
     const closeSettingsBtn = document.getElementById('closeSettings');
@@ -341,7 +332,6 @@
         }
     });
 
-    // 确保在 DOM 加载完成后也尝试渲染 (以防load事件被覆盖)
     document.addEventListener('DOMContentLoaded', () => {
         renderPdfList();
     });
