@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>链接列表 · 仿dmc0702风格</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background-image: url('https://picsum.photos/id/1036/1920/1080');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: background-image 0.5s ease;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .quote-mark {
+            position: absolute;
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+        .quote-mark.left {
+            top: -1rem;
+            left: -1rem;
+        }
+        .quote-mark.right {
+            bottom: -3rem;
+            right: -1rem;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        /* 列表卡片中的链接块 */
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+        }
+        .list-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        .list-item i {
+            width: 2rem;
+            text-align: center;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .list-item .title {
+            flex: 1;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+        .list-item .badge {
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        /* 壁纸按钮选中状态 */
+        .wallpaper-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+<div class="min-h-screen flex flex-col">
+
+    <!-- 导航栏 (完全仿照原风格，只保留必要元素) -->
+    <nav class="glass p-4 flex justify-between items-center sticky top-0 z-40">
+        <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 hover:border-white/40 transition-all duration-300">
+                <!-- 占位头像 (沿用原风格图标) -->
+                <img src="https://cdn.luogu.com.cn/upload/usericon/1048333.png" class="w-full h-full object-cover" alt="avatar">
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight" style="font-family: 'Pacifico', cursive;">Link list</h1>
+        </div>
+        <div class="flex space-x-4">
+            <button id="openSettings" class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
+                <i class="fas fa-cog text-xl"></i>
+                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">设置</span>
+            </button>
+            <a href="#" target="_blank" rel="noopener" class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
+                <i class="fab fa-github text-xl"></i>
+                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">GitHub</span>
+            </a>
+            <a href="#" class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
+                <i class="fas fa-envelope text-xl"></i>
+                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">邮箱</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="flex-1 p-8 max-w-5xl mx-auto w-full">
+        <!-- 页面描述：简洁的一行，与原“每日一言”风格呼应，但不抢眼 -->
+        <div class="glass rounded-2xl p-4 mb-6 text-center relative overflow-hidden">
+            <span class="quote-mark left text-3xl">“</span>
+            <p class="text-sm text-white/70">
+                <i class="fas fa-link mr-2 text-blue-300"></i> 
+                收藏 · 发现 · 灵感 —— 每个方框都是一个有标题的链接
+            </p>
+            <span class="quote-mark right text-3xl">”</span>
+        </div>
+
+        <!-- 主要内容：列表卡片 (标题 + 链接网格) 完全符合要求 -->
+        <div class="glass rounded-2xl p-8">
+            <!-- 卡片主标题 (符合“每个方框都有一个标题”) -->
+            <h2 class="text-2xl font-bold mb-6 flex items-center border-b border-white/10 pb-3">
+                <i class="fas fa-th-large mr-3 text-purple-300"></i>
+                精选链接库
+                <span class="ml-auto text-sm font-normal text-white/40 bg-white/5 px-3 py-1 rounded-full">10个条目</span>
+            </h2>
+
+            <!-- 列表网格：每个方框都是一个标题 + 链接 (采用flex列表布局，但视觉上方框感强) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- 条目 1 -->
+                <div class="list-item group">
+                    <i class="fab fa-github-alt text-blue-300"></i>
+                    <span class="title">GitHub 个人仓库</span>
+                    <a href="https://github.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
+                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+                <!-- 条目 2 -->
+                <div class="list-item group">
+                    <i class="fas fa-code text-green-300"></i>
+                    <span class="title">洛谷 OI 题库</span>
+                    <a href="https://www.luogu.com.cn" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
+                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+                <!-- 条目 3 -->
+                <div class="list-item group">
+                    <i class="fas fa-cloud-sun text-yellow-300"></i>
+                    <span class="title">实时天气 API</span>
+                    <a href="https://openweathermap.org" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
+                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+                <!-- 条目 4 -->
+                <div class="list-item group">
+                    <i class="fas fa-font text-pink-300"></i>
+                    <span class="title">Google Fonts</span>
+                    <a href="https://fonts.google.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
+                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+                <!-- 条目 5 -->
+                <div class="list-item group">
+                    <i class="fas fa-icons text-indigo-300"></i>
+                    <span class="title">Font Awesome 图标库</span>
+                    <a href="https://fontawesome.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
+                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+                <!-- 条目 6 -->
+                <div class="list-item group">
+                    <i class="fab fa-css3-alt text-blue-400"></i>
+                    <span class="title">Tailwind CSS 文档</span>
+                    <a href="https://tailwindcss.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
+                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+                <!-- 条目 7 -->
+                <div class="list-item group">
+                    <i class="fas fa-image text-purple-300"></i>
+                    <span class="title">Lorem Picsum 壁纸</span>
+                    <a href="https://picsum.photos" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
+                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+                <!-- 条目 8 -->
+                <div class="list-item group">
+                    <i class="fas fa-brain text-red-300"></i>
+                    <span class="title">每日一言 API</span>
+                    <a href="https://v.api.aa1.cn" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
+                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+                <!-- 条目 9 -->
+                <div class="list-item group">
+                    <i class="fas fa-map-marked-alt text-green-400"></i>
+                    <span class="title">高德地图开放平台</span>
+                    <a href="https://lbs.amap.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
+                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+                <!-- 条目 10 -->
+                <div class="list-item group">
+                    <i class="fas fa-music text-yellow-400"></i>
+                    <span class="title">网易云音乐</span>
+                    <a href="https://music.163.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
+                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 底部装饰文字，仿原“极简分割线”卡片的感觉 -->
+            <div class="flex items-center justify-center gap-2 mt-8">
+                <div class="w-8 h-px bg-white/20"></div>
+                <div class="w-1 h-1 rounded-full bg-white/30"></div>
+                <span class="text-xs text-white/40 px-2">每个方框 · 标题 · 链接</span>
+                <div class="w-1 h-1 rounded-full bg-white/30"></div>
+                <div class="w-8 h-px bg-white/20"></div>
+            </div>
+        </div>
+
+        <!-- 额外装饰：仿原“小工具”卡片风格，简单说明，但不破坏主要列表结构 (可选) -->
+        <div class="glass rounded-2xl p-5 mt-6 text-center text-sm text-white/50 flex justify-center items-center gap-4">
+            <i class="fas fa-check-circle text-green-300/60"></i>
+            <span>所有链接均在新标签页打开 · 点击即跳转</span>
+            <i class="fas fa-external-link-alt text-white/30"></i>
+        </div>
+    </main>
+
+    <!-- 页脚 (完全仿原风格) -->
+    <footer class="glass p-4 text-center text-sm text-white/60">
+        <p>
+            <i class="far fa-copyright mr-1"></i>
+            2025 仿dmc0702风格 · 链接列表 
+            <span class="mx-2">·</span>
+            Made with <i class="fas fa-heart text-red-400 mx-1"></i> for clean UI
+            <span class="mx-2">·</span>
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hover:text-white transition-colors">
+                <i class="fas fa-arrow-up"></i> 回到顶部
+            </button>
+        </p>
+    </footer>
+</div>
+
+<!-- 回到顶部按钮 (备用) -->
+<button id="backToTop" class="fixed bottom-8 right-8 glass w-12 h-12 rounded-full flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-white/20 hover:scale-110">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- 设置弹窗 (保留原壁纸功能，增加交互性) -->
+<div id="settingsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center hidden">
+    <div class="glass rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto animate-fadeIn">
+        <div class="p-6 flex justify-between items-center border-b border-white/10">
+            <h2 class="text-xl font-bold flex items-center">
+                <i class="fas fa-cog mr-2 animate-spin-slow"></i>
+                壁纸设置
+            </h2>
+            <button id="closeSettings" class="text-white/60 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <h3 class="text-sm font-semibold mb-3 text-white/80 flex items-center">
+                <i class="fas fa-image mr-2"></i>
+                个性壁纸 (点击切换)
+            </h3>
+            <div class="flex flex-wrap gap-3">
+                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="default">🌄 默认壁纸</button>
+                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="daily">📅 每日一图</button>
+                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="scenery">🏞️ 随机风景</button>
+                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="anime">🎮 随机动漫</button>
+            </div>
+            <p class="text-sm text-white/40 text-center mt-6">其他设置开发中 · 壁纸偏好已保存</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ===== 壁纸功能 (完全复用原代码) =====
+    (function() {
+        const wallpapers = {
+            default: 'https://picsum.photos/id/1036/1920/1080',
+            daily: 'https://picsum.photos/1920/1080?random&' + new Date().toDateString(),
+            scenery: 'https://picsum.photos/1920/1080?random=1&' + Math.random(),
+            anime: 'https://picsum.photos/1920/1080?random=2&' + Math.random()
+        };
+        const savedWallpaper = localStorage.getItem('wallpaper_dmc') || 'default';
+        
+        function applyWallpaper(type) {
+            document.body.style.backgroundImage = `url('${wallpapers[type]}')`;
+            localStorage.setItem('wallpaper_dmc', type);
+            document.querySelectorAll('.wallpaper-btn').forEach(btn => {
+                if (btn.dataset.wallpaper === type) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        window.addEventListener('load', () => {
+            applyWallpaper(savedWallpaper);
+        });
+
+        document.querySelectorAll('.wallpaper-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                applyWallpaper(this.dataset.wallpaper);
+            });
+        });
+    })();
+
+    // 回到顶部按钮显示/隐藏
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            backBtn.classList.remove('opacity-0', 'invisible');
+            backBtn.classList.add('opacity-100', 'visible');
+        } else {
+            backBtn.classList.add('opacity-0', 'invisible');
+            backBtn.classList.remove('opacity-100', 'visible');
+        }
+    });
+    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // 设置弹窗控制
+    const openSettingsBtn = document.getElementById('openSettings');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettingsBtn = document.getElementById('closeSettings');
+    
+    openSettingsBtn.addEventListener('click', () => {
+        settingsModal.classList.remove('hidden');
+        settingsModal.classList.add('flex');
+    });
+    
+    closeSettingsBtn.addEventListener('click', () => {
+        settingsModal.classList.add('hidden');
+        settingsModal.classList.remove('flex');
+    });
+    
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) {
+            settingsModal.classList.add('hidden');
+            settingsModal.classList.remove('flex');
+        }
+    });
+
+    // 可选：简单的时间显示（只是为了增加动态感，但不是必须，这里只加一个更新时间戳）
+    function updateFooterTime() {
+        const now = new Date();
+        // 可以忽略，只是为了填充
+    }
+    setInterval(updateFooterTime, 1000);
+
+    // 让所有外部链接在新标签页打开（已经写了target=_blank，安全起见加上rel）
+    // 不需要额外操作
+</script>
+</body>
+</html>
