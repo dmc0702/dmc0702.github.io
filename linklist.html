@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>链接列表 · 仿dmc0702风格</title>
+    <title>课程资料 · 列表</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -35,39 +35,6 @@
             color: rgba(255, 255, 255, 0.1);
             z-index: 0;
         }
-        .quote-mark.left {
-            top: -1rem;
-            left: -1rem;
-        }
-        .quote-mark.right {
-            bottom: -3rem;
-            right: -1rem;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-            animation: fadeIn 0.5s ease forwards;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        /* 自定义滚动条 */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-        /* 列表卡片中的链接块 */
         .list-item {
             display: flex;
             align-items: center;
@@ -92,6 +59,9 @@
             flex: 1;
             font-weight: 500;
             margin-left: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .list-item .badge {
             font-size: 0.75rem;
@@ -100,7 +70,19 @@
             border-radius: 999px;
             color: rgba(255, 255, 255, 0.6);
         }
-        /* 壁纸按钮选中状态 */
+        html {
+            scroll-behavior: smooth;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
         .wallpaper-btn.active {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.5);
@@ -110,180 +92,97 @@
 <body class="min-h-screen text-white">
 <div class="min-h-screen flex flex-col">
 
-    <!-- 导航栏 (完全仿照原风格，只保留必要元素) -->
+    <!-- 导航栏 (简化，保留头像和标题) -->
     <nav class="glass p-4 flex justify-between items-center sticky top-0 z-40">
         <div class="flex items-center space-x-4">
             <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 hover:border-white/40 transition-all duration-300">
-                <!-- 占位头像 (沿用原风格图标) -->
                 <img src="https://cdn.luogu.com.cn/upload/usericon/1048333.png" class="w-full h-full object-cover" alt="avatar">
             </div>
-            <h1 class="text-3xl font-bold tracking-tight" style="font-family: 'Pacifico', cursive;">Link list</h1>
+            <h1 class="text-3xl font-bold tracking-tight" style="font-family: 'Pacifico', cursive;">Courseware</h1>
         </div>
         <div class="flex space-x-4">
             <button id="openSettings" class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
                 <i class="fas fa-cog text-xl"></i>
-                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">设置</span>
+                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">壁纸</span>
             </button>
-            <a href="#" target="_blank" rel="noopener" class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
-                <i class="fab fa-github text-xl"></i>
-                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">GitHub</span>
-            </a>
-            <a href="#" class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
-                <i class="fas fa-envelope text-xl"></i>
-                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">邮箱</span>
+            <!-- 返回主页按钮 (链接到 dmc0702.github.io) -->
+            <a href="https://dmc0702.github.io" target="_blank" rel="noopener" class="p-2 hover:bg-white/10 rounded-full transition-colors relative group">
+                <i class="fas fa-home text-xl"></i>
+                <span class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">返回主页</span>
             </a>
         </div>
     </nav>
 
-    <main class="flex-1 p-8 max-w-5xl mx-auto w-full">
-        <!-- 页面描述：简洁的一行，与原“每日一言”风格呼应，但不抢眼 -->
+    <main class="flex-1 p-8 max-w-6xl mx-auto w-full">
+        <!-- 简洁头部说明 -->
         <div class="glass rounded-2xl p-4 mb-6 text-center relative overflow-hidden">
             <span class="quote-mark left text-3xl">“</span>
             <p class="text-sm text-white/70">
-                <i class="fas fa-link mr-2 text-blue-300"></i> 
-                收藏 · 发现 · 灵感 —— 每个方框都是一个有标题的链接
+                <i class="fas fa-book-open mr-2 text-blue-300"></i> 
+                dmc0702 的课程笔记 · 点击标题下载PDF
             </p>
             <span class="quote-mark right text-3xl">”</span>
         </div>
 
-        <!-- 主要内容：列表卡片 (标题 + 链接网格) 完全符合要求 -->
+        <!-- 主卡片：链接列表 -->
         <div class="glass rounded-2xl p-8">
-            <!-- 卡片主标题 (符合“每个方框都有一个标题”) -->
             <h2 class="text-2xl font-bold mb-6 flex items-center border-b border-white/10 pb-3">
-                <i class="fas fa-th-large mr-3 text-purple-300"></i>
-                精选链接库
-                <span class="ml-auto text-sm font-normal text-white/40 bg-white/5 px-3 py-1 rounded-full">10个条目</span>
+                <i class="fas fa-file-pdf mr-3 text-red-300"></i>
+                算法学习资料
+                <span class="ml-auto text-sm font-normal text-white/40 bg-white/5 px-3 py-1 rounded-full">{{COUNT}}个文件</span>
             </h2>
 
-            <!-- 列表网格：每个方框都是一个标题 + 链接 (采用flex列表布局，但视觉上方框感强) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- 条目 1 -->
-                <div class="list-item group">
-                    <i class="fab fa-github-alt text-blue-300"></i>
-                    <span class="title">GitHub 个人仓库</span>
-                    <a href="https://github.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
-                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
-                    </a>
-                </div>
-                <!-- 条目 2 -->
-                <div class="list-item group">
-                    <i class="fas fa-code text-green-300"></i>
-                    <span class="title">洛谷 OI 题库</span>
-                    <a href="https://www.luogu.com.cn" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
-                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
-                    </a>
-                </div>
-                <!-- 条目 3 -->
-                <div class="list-item group">
-                    <i class="fas fa-cloud-sun text-yellow-300"></i>
-                    <span class="title">实时天气 API</span>
-                    <a href="https://openweathermap.org" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
-                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
-                    </a>
-                </div>
-                <!-- 条目 4 -->
-                <div class="list-item group">
-                    <i class="fas fa-font text-pink-300"></i>
-                    <span class="title">Google Fonts</span>
-                    <a href="https://fonts.google.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
-                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
-                    </a>
-                </div>
-                <!-- 条目 5 -->
-                <div class="list-item group">
-                    <i class="fas fa-icons text-indigo-300"></i>
-                    <span class="title">Font Awesome 图标库</span>
-                    <a href="https://fontawesome.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
-                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
-                    </a>
-                </div>
-                <!-- 条目 6 -->
-                <div class="list-item group">
-                    <i class="fab fa-css3-alt text-blue-400"></i>
-                    <span class="title">Tailwind CSS 文档</span>
-                    <a href="https://tailwindcss.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
-                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
-                    </a>
-                </div>
-                <!-- 条目 7 -->
-                <div class="list-item group">
-                    <i class="fas fa-image text-purple-300"></i>
-                    <span class="title">Lorem Picsum 壁纸</span>
-                    <a href="https://picsum.photos" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
-                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
-                    </a>
-                </div>
-                <!-- 条目 8 -->
-                <div class="list-item group">
-                    <i class="fas fa-brain text-red-300"></i>
-                    <span class="title">每日一言 API</span>
-                    <a href="https://v.api.aa1.cn" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
-                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
-                    </a>
-                </div>
-                <!-- 条目 9 -->
-                <div class="list-item group">
-                    <i class="fas fa-map-marked-alt text-green-400"></i>
-                    <span class="title">高德地图开放平台</span>
-                    <a href="https://lbs.amap.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
-                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
-                    </a>
-                </div>
-                <!-- 条目 10 -->
-                <div class="list-item group">
-                    <i class="fas fa-music text-yellow-400"></i>
-                    <span class="title">网易云音乐</span>
-                    <a href="https://music.163.com" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
-                        访问 <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
-                    </a>
-                </div>
+            <!-- 动态生成的列表网格 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="pdf-list-container">
+                <!-- 列表将由 JavaScript 动态生成，以保证链接准确且可维护 -->
             </div>
 
-            <!-- 底部装饰文字，仿原“极简分割线”卡片的感觉 -->
+            <!-- 底部装饰 -->
             <div class="flex items-center justify-center gap-2 mt-8">
                 <div class="w-8 h-px bg-white/20"></div>
                 <div class="w-1 h-1 rounded-full bg-white/30"></div>
-                <span class="text-xs text-white/40 px-2">每个方框 · 标题 · 链接</span>
+                <span class="text-xs text-white/40 px-2">共 {{COUNT}} 份讲义</span>
                 <div class="w-1 h-1 rounded-full bg-white/30"></div>
                 <div class="w-8 h-px bg-white/20"></div>
             </div>
         </div>
 
-        <!-- 额外装饰：仿原“小工具”卡片风格，简单说明，但不破坏主要列表结构 (可选) -->
-        <div class="glass rounded-2xl p-5 mt-6 text-center text-sm text-white/50 flex justify-center items-center gap-4">
-            <i class="fas fa-check-circle text-green-300/60"></i>
-            <span>所有链接均在新标签页打开 · 点击即跳转</span>
+        <!-- 额外的返回主页按钮 (备用的文本按钮) -->
+        <div class="glass rounded-2xl p-5 mt-6 text-center flex justify-center items-center gap-4">
+            <i class="fas fa-arrow-left text-green-300/60"></i>
+            <a href="https://dmc0702.github.io" target="_blank" rel="noopener" class="text-white/80 hover:text-white transition-colors underline decoration-white/30 underline-offset-4">
+                返回 dmc0702.github.io 主页
+            </a>
             <i class="fas fa-external-link-alt text-white/30"></i>
         </div>
     </main>
 
-    <!-- 页脚 (完全仿原风格) -->
+    <!-- 页脚 -->
     <footer class="glass p-4 text-center text-sm text-white/60">
         <p>
             <i class="far fa-copyright mr-1"></i>
-            2025 仿dmc0702风格 · 链接列表 
+            2025 dmc0702 课程列表 
             <span class="mx-2">·</span>
-            Made with <i class="fas fa-heart text-red-400 mx-1"></i> for clean UI
+            Made with <i class="fas fa-heart text-red-400 mx-1"></i> for learners
             <span class="mx-2">·</span>
             <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hover:text-white transition-colors">
-                <i class="fas fa-arrow-up"></i> 回到顶部
+                <i class="fas fa-arrow-up"></i> 顶部
             </button>
         </p>
     </footer>
 </div>
 
-<!-- 回到顶部按钮 (备用) -->
+<!-- 回到顶部按钮 -->
 <button id="backToTop" class="fixed bottom-8 right-8 glass w-12 h-12 rounded-full flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-white/20 hover:scale-110">
     <i class="fas fa-arrow-up"></i>
 </button>
 
-<!-- 设置弹窗 (保留原壁纸功能，增加交互性) -->
+<!-- 壁纸设置弹窗 (保留原功能) -->
 <div id="settingsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center hidden">
-    <div class="glass rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto animate-fadeIn">
+    <div class="glass rounded-2xl w-full max-w-2xl animate-fadeIn">
         <div class="p-6 flex justify-between items-center border-b border-white/10">
             <h2 class="text-xl font-bold flex items-center">
-                <i class="fas fa-cog mr-2 animate-spin-slow"></i>
-                壁纸设置
+                <i class="fas fa-cog mr-2"></i> 壁纸设置
             </h2>
             <button id="closeSettings" class="text-white/60 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full">
                 <i class="fas fa-times"></i>
@@ -291,22 +190,85 @@
         </div>
         <div class="p-6">
             <h3 class="text-sm font-semibold mb-3 text-white/80 flex items-center">
-                <i class="fas fa-image mr-2"></i>
-                个性壁纸 (点击切换)
+                <i class="fas fa-image mr-2"></i> 个性壁纸
             </h3>
             <div class="flex flex-wrap gap-3">
-                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="default">🌄 默认壁纸</button>
-                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="daily">📅 每日一图</button>
-                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="scenery">🏞️ 随机风景</button>
-                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10 transition-all duration-300 hover:scale-105" data-wallpaper="anime">🎮 随机动漫</button>
+                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10" data-wallpaper="default">🌄 默认</button>
+                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10" data-wallpaper="daily">📅 每日一图</button>
+                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10" data-wallpaper="scenery">🏞️ 风景</button>
+                <button class="wallpaper-btn px-4 py-2 rounded-lg glass hover:bg-white/10" data-wallpaper="anime">🎮 动漫</button>
             </div>
-            <p class="text-sm text-white/40 text-center mt-6">其他设置开发中 · 壁纸偏好已保存</p>
         </div>
     </div>
 </div>
 
 <script>
-    // ===== 壁纸功能 (完全复用原代码) =====
+    // ===== 1. 核心数据：您提供的所有 PDF 链接（已整理为对象数组）=====
+    const pdfFiles = [
+        { name: "Convex Hull Trick", file: "Convex Hull Trick.pdf" },
+        { name: "Count DP", file: "Count DP.pdf" },
+        { name: "DFS序维护树上信息", file: "DFS序维护树上信息.pdf" },
+        { name: "DP on Subsets", file: "DP on Subsets.pdf" },
+        { name: "Digit Count DP", file: "Digit Count DP.pdf" },
+        { name: "Eulerian Path", file: "Eulerian Path.pdf" },
+        { name: "FHQ Treap Tree", file: "FHQ Treap Tree.pdf" },
+        { name: "Monotonic+Queue+Optimization", file: "Monotonic+Queue+Optimization.pdf" },
+        { name: "Quadrangle Inequality Optimization", file: "Quadrangle Inequality Optimization.pdf" },
+        { name: "Scapegoat Tree", file: "Scapegoat Tree.pdf" },
+        { name: "Splay Tree", file: "Splay+Tree.pdf" },          // 文件名含+，已保留
+        { name: "Treap Tree", file: "Treap Tree.pdf" },
+        { name: "Tree Dynamic Programming", file: "Tree Dynamic Programming.pdf" },
+        { name: "nullfile", file: "nullfile.txt" },              // 文本文件，保留原始链接
+        { name: "扫描线与离线知识复习", file: "扫描线与离线知识复习.pdf" },
+        { name: "树链剖分", file: "树链剖分.pdf" },
+        { name: "线段树", file: "线段树.pdf" }
+    ];
+
+    // 基础 URL
+    const baseUrl = "https://dmc0702.github.io/courseware/";
+
+    // 更新卡片总数显示 (两个地方)
+    function updateCountDisplay() {
+        const countSpans = document.querySelectorAll('#pdf-list-container ~ .flex .text-xs, h2 .rounded-full');
+        // 简单处理：直接设置 h2 旁边的计数
+        const h2Count = document.querySelector('h2 .rounded-full');
+        if (h2Count) h2Count.innerText = pdfFiles.length + '个文件';
+        // 底部装饰计数
+        const footerCount = document.querySelector('.flex.justify-center.gap-2 .text-xs.px-2');
+        if (footerCount) footerCount.innerText = `共 ${pdfFiles.length} 份讲义`;
+    }
+
+    // ===== 2. 动态生成列表 =====
+    function renderPdfList() {
+        const container = document.getElementById('pdf-list-container');
+        if (!container) return;
+
+        let htmlStr = '';
+        pdfFiles.forEach(item => {
+            // 对文件名进行编码，保留特殊字符如 + 和中文，但空格等需处理
+            // 直接使用 encodeURIComponent 编码整个文件名，但注意 URL 中路径部分不应编码，只编码文件名
+            const encodedFile = encodeURIComponent(item.file);
+            const fullUrl = baseUrl + encodedFile;
+            
+            // 根据文件扩展名显示不同图标
+            const isPdf = item.file.toLowerCase().endsWith('.pdf');
+            const iconClass = isPdf ? 'fa-file-pdf text-red-300' : 'fa-file-alt text-gray-300';
+            
+            htmlStr += `
+                <div class="list-item group">
+                    <i class="fas ${iconClass}"></i>
+                    <span class="title" title="${item.name}">${item.name}</span>
+                    <a href="${fullUrl}" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
+                        ${isPdf ? 'PDF' : 'TXT'} <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
+                    </a>
+                </div>
+            `;
+        });
+        container.innerHTML = htmlStr;
+        updateCountDisplay();
+    }
+
+    // ===== 3. 壁纸功能 (完全保留原逻辑) =====
     (function() {
         const wallpapers = {
             default: 'https://picsum.photos/id/1036/1920/1080',
@@ -330,16 +292,21 @@
 
         window.addEventListener('load', () => {
             applyWallpaper(savedWallpaper);
+            renderPdfList();  // 渲染列表
         });
 
-        document.querySelectorAll('.wallpaper-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                applyWallpaper(this.dataset.wallpaper);
-            });
+        // 为壁纸按钮添加事件 (需等待DOM)
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('wallpaper-btn') || e.target.closest('.wallpaper-btn')) {
+                const btn = e.target.closest('.wallpaper-btn');
+                if (btn && btn.dataset.wallpaper) {
+                    applyWallpaper(btn.dataset.wallpaper);
+                }
+            }
         });
     })();
 
-    // 回到顶部按钮显示/隐藏
+    // ===== 4. 回到顶部与弹窗控制 =====
     const backBtn = document.getElementById('backToTop');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 300) {
@@ -352,7 +319,7 @@
     });
     backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // 设置弹窗控制
+    // 设置弹窗
     const openSettingsBtn = document.getElementById('openSettings');
     const settingsModal = document.getElementById('settingsModal');
     const closeSettingsBtn = document.getElementById('closeSettings');
@@ -374,15 +341,10 @@
         }
     });
 
-    // 可选：简单的时间显示（只是为了增加动态感，但不是必须，这里只加一个更新时间戳）
-    function updateFooterTime() {
-        const now = new Date();
-        // 可以忽略，只是为了填充
-    }
-    setInterval(updateFooterTime, 1000);
-
-    // 让所有外部链接在新标签页打开（已经写了target=_blank，安全起见加上rel）
-    // 不需要额外操作
+    // 确保在 DOM 加载完成后也尝试渲染 (以防load事件被覆盖)
+    document.addEventListener('DOMContentLoaded', () => {
+        renderPdfList();
+    });
 </script>
 </body>
 </html>
