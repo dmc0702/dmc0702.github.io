@@ -203,7 +203,7 @@
 </div>
 
 <script>
-    // ===== 1. 核心数据：已删除 nullfile.txt =====
+    // ===== 1. 核心数据：已添加 Lucas+Theorem.pdf =====
     const pdfFiles = [
         { name: "Convex Hull Trick", file: "Convex Hull Trick.pdf" },
         { name: "Count DP", file: "Count DP.pdf" },
@@ -220,7 +220,8 @@
         { name: "Tree Dynamic Programming", file: "Tree Dynamic Programming.pdf" },
         { name: "扫描线与离线知识复习", file: "扫描线与离线知识复习.pdf" },
         { name: "树链剖分", file: "树链剖分.pdf" },
-        { name: "线段树", file: "线段树.pdf" }
+        { name: "线段树", file: "线段树.pdf" },
+        { name: "Lucas Theorem", file: "Lucas+Theorem.pdf" }  // 新增
     ];
 
     // 基础 URL
@@ -244,7 +245,7 @@
             const encodedFile = encodeURIComponent(item.file);
             const fullUrl = baseUrl + encodedFile;
             
-            // 所有文件都是PDF（根据实际，保留判断但默认PDF）
+            // 所有文件都是PDF
             const iconClass = 'fa-file-pdf text-red-300';
             
             htmlStr += `
