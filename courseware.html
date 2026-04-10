@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF列表</title>
+    <title>PDF列表 · 算法讲义库</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -69,6 +69,11 @@
             padding: 0.2rem 0.6rem;
             border-radius: 999px;
             color: rgba(255, 255, 255, 0.6);
+            transition: all 0.2s ease;
+        }
+        .list-item .badge:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
         }
         html {
             scroll-behavior: smooth;
@@ -86,6 +91,14 @@
         .wallpaper-btn.active {
             background: rgba(255, 255, 255, 0.2);
             border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 8px rgba(255,255,255,0.2);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.2s ease-out;
         }
     </style>
 </head>
@@ -129,7 +142,7 @@
             <h2 class="text-2xl font-bold mb-6 flex items-center border-b border-white/10 pb-3">
                 <i class="fas fa-file-pdf mr-3 text-red-300"></i>
                 算法学习资料
-                <span class="ml-auto text-sm font-normal text-white/40 bg-white/5 px-3 py-1 rounded-full">{{COUNT}}个文件</span>
+                <span class="ml-auto text-sm font-normal text-white/40 bg-white/5 px-3 py-1 rounded-full" id="fileCountBadge">0个文件</span>
             </h2>
 
             <!-- 动态生成的列表网格 -->
@@ -141,7 +154,7 @@
             <div class="flex items-center justify-center gap-2 mt-8">
                 <div class="w-8 h-px bg-white/20"></div>
                 <div class="w-1 h-1 rounded-full bg-white/30"></div>
-                <span class="text-xs text-white/40 px-2">共 {{COUNT}} 份讲义</span>
+                <span class="text-xs text-white/40 px-2" id="footerCountText">共 0 份讲义</span>
                 <div class="w-1 h-1 rounded-full bg-white/30"></div>
                 <div class="w-8 h-px bg-white/20"></div>
             </div>
@@ -203,8 +216,14 @@
 </div>
 
 <script>
-    // ===== 1. 核心数据：已添加 Catalan Number.pdf =====
+    // ============================================================
+    // 根据您提供的最新课件列表，完全按照原始文件名称定义
+    // 包含了所有 PDF，顺序与展示内容一致。
+    // 注意：文件名中的 '+' 号保留原样，例如 "Lucas+Theorem.pdf"
+    // 新增的两个课件： "SG函数与威佐夫游戏.pdf" 和 "公平组合游戏(博弈论).pdf"
+    // ============================================================
     const pdfFiles = [
+        { name: "Catalan Number", file: "Catalan Number.pdf" },
         { name: "Convex Hull Trick", file: "Convex Hull Trick.pdf" },
         { name: "Count DP", file: "Count DP.pdf" },
         { name: "DFS序维护树上信息", file: "DFS序维护树上信息.pdf" },
@@ -212,47 +231,62 @@
         { name: "Digit Count DP", file: "Digit Count DP.pdf" },
         { name: "Eulerian Path", file: "Eulerian Path.pdf" },
         { name: "FHQ Treap Tree", file: "FHQ Treap Tree.pdf" },
-        { name: "Monotonic+Queue+Optimization", file: "Monotonic+Queue+Optimization.pdf" },
+        { name: "Lucas Theorem", file: "Lucas+Theorem.pdf" },        // 原文件名 Lucas+Theorem.pdf
+        { name: "Monotonic Queue Optimization", file: "Monotonic+Queue+Optimization.pdf" },
         { name: "Quadrangle Inequality Optimization", file: "Quadrangle Inequality Optimization.pdf" },
+        { name: "SG函数与威佐夫游戏", file: "SG函数与威佐夫游戏.pdf" },   // 新增
         { name: "Scapegoat Tree", file: "Scapegoat Tree.pdf" },
         { name: "Splay Tree", file: "Splay+Tree.pdf" },
+        { name: "Stirling Number", file: "Stirling Number.pdf" },
         { name: "Treap Tree", file: "Treap Tree.pdf" },
         { name: "Tree Dynamic Programming", file: "Tree Dynamic Programming.pdf" },
+        { name: "公平组合游戏(博弈论)", file: "公平组合游戏(博弈论).pdf" }, // 新增
         { name: "扫描线与离线知识复习", file: "扫描线与离线知识复习.pdf" },
         { name: "树链剖分", file: "树链剖分.pdf" },
-        { name: "线段树", file: "线段树.pdf" },
-        { name: "Lucas Theorem", file: "Lucas+Theorem.pdf" },
-        { name: "Catalan Number", file: "Catalan Number.pdf" }  // 新增
+        { name: "线段树", file: "线段树.pdf" }
     ];
 
-    // 基础 URL
+    // 基础 URL (仓库 courseware 目录)
     const baseUrl = "https://dmc0702.github.io/courseware/";
 
-    // 更新计数显示
+    // 更新所有计数显示 (标题右侧徽章 + 底部统计)
     function updateCountDisplay() {
-        const h2Count = document.querySelector('h2 .rounded-full');
-        if (h2Count) h2Count.innerText = pdfFiles.length + '个文件';
-        const footerCount = document.querySelector('.flex.justify-center.gap-2 .text-xs.px-2');
-        if (footerCount) footerCount.innerText = `共 ${pdfFiles.length} 份讲义`;
+        const count = pdfFiles.length;
+        const fileCountBadge = document.getElementById('fileCountBadge');
+        const footerCountText = document.getElementById('footerCountText');
+        if (fileCountBadge) fileCountBadge.innerText = count + '个文件';
+        if (footerCountText) footerCountText.innerText = `共 ${count} 份讲义`;
     }
 
-    // ===== 2. 动态生成列表 =====
+    // 简易防XSS辅助函数，保证课件名称安全显示
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // ===== 动态生成PDF列表 (完全仿照原有链接框样式) =====
     function renderPdfList() {
         const container = document.getElementById('pdf-list-container');
         if (!container) return;
 
         let htmlStr = '';
         pdfFiles.forEach(item => {
+            // 文件名可能包含 '+' 或中文或括号，使用 encodeURIComponent 确保链接有效
             const encodedFile = encodeURIComponent(item.file);
             const fullUrl = baseUrl + encodedFile;
             
-            // 所有文件都是PDF
+            // 统一PDF图标风格
             const iconClass = 'fa-file-pdf text-red-300';
             
             htmlStr += `
                 <div class="list-item group">
                     <i class="fas ${iconClass}"></i>
-                    <span class="title" title="${item.name}">${item.name}</span>
+                    <span class="title" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</span>
                     <a href="${fullUrl}" target="_blank" rel="noopener" class="badge hover:bg-white/20 transition-colors">
                         PDF <i class="fas fa-external-link-alt ml-1 text-[10px]"></i>
                     </a>
@@ -263,7 +297,7 @@
         updateCountDisplay();
     }
 
-    // ===== 3. 壁纸功能 =====
+    // ===== 壁纸功能 (保持原交互，支持本地存储) =====
     (function() {
         const wallpapers = {
             default: 'https://picsum.photos/id/1036/1920/1080',
@@ -274,6 +308,7 @@
         const savedWallpaper = localStorage.getItem('wallpaper_dmc') || 'default';
         
         function applyWallpaper(type) {
+            if (!wallpapers[type]) type = 'default';
             document.body.style.backgroundImage = `url('${wallpapers[type]}')`;
             localStorage.setItem('wallpaper_dmc', type);
             document.querySelectorAll('.wallpaper-btn').forEach(btn => {
@@ -284,59 +319,71 @@
                 }
             });
         }
-
+        
+        // 页面加载时渲染列表并应用壁纸
         window.addEventListener('load', () => {
+            renderPdfList();    // 根据最新的 pdfFiles 生成所有卡片，包含新增的两份博弈论课件
             applyWallpaper(savedWallpaper);
-            renderPdfList();
         });
-
+        
+        // 壁纸按钮事件委托
         document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('wallpaper-btn') || e.target.closest('.wallpaper-btn')) {
-                const btn = e.target.closest('.wallpaper-btn');
-                if (btn && btn.dataset.wallpaper) {
-                    applyWallpaper(btn.dataset.wallpaper);
-                }
+            const btn = e.target.closest('.wallpaper-btn');
+            if (btn && btn.dataset && btn.dataset.wallpaper) {
+                applyWallpaper(btn.dataset.wallpaper);
             }
         });
     })();
 
-    // ===== 4. 回到顶部与弹窗控制 =====
+    // ===== 回到顶部按钮与弹窗控制 =====
     const backBtn = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            backBtn.classList.remove('opacity-0', 'invisible');
-            backBtn.classList.add('opacity-100', 'visible');
-        } else {
-            backBtn.classList.add('opacity-0', 'invisible');
-            backBtn.classList.remove('opacity-100', 'visible');
-        }
-    });
-    backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    if (backBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backBtn.classList.remove('opacity-0', 'invisible');
+                backBtn.classList.add('opacity-100', 'visible');
+            } else {
+                backBtn.classList.add('opacity-0', 'invisible');
+                backBtn.classList.remove('opacity-100', 'visible');
+            }
+        });
+        backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
 
     const openSettingsBtn = document.getElementById('openSettings');
     const settingsModal = document.getElementById('settingsModal');
     const closeSettingsBtn = document.getElementById('closeSettings');
     
-    openSettingsBtn.addEventListener('click', () => {
-        settingsModal.classList.remove('hidden');
-        settingsModal.classList.add('flex');
-    });
-    
-    closeSettingsBtn.addEventListener('click', () => {
-        settingsModal.classList.add('hidden');
-        settingsModal.classList.remove('flex');
-    });
-    
-    settingsModal.addEventListener('click', (e) => {
-        if (e.target === settingsModal) {
+    if (openSettingsBtn && settingsModal && closeSettingsBtn) {
+        openSettingsBtn.addEventListener('click', () => {
+            settingsModal.classList.remove('hidden');
+            settingsModal.classList.add('flex');
+        });
+        
+        closeSettingsBtn.addEventListener('click', () => {
             settingsModal.classList.add('hidden');
             settingsModal.classList.remove('flex');
+        });
+        
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) {
+                settingsModal.classList.add('hidden');
+                settingsModal.classList.remove('flex');
+            }
+        });
+    }
+    
+    // 确保 DOM 加载完成后再次确保渲染（避免任何异步遗漏）
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.getElementById('pdf-list-container') && document.getElementById('pdf-list-container').children.length === 0) {
+            renderPdfList();
+        } else {
+            updateCountDisplay();
         }
     });
-
-    document.addEventListener('DOMContentLoaded', () => {
-        renderPdfList();
-    });
+    
+    // 验证控制台输出（可选，确保文件数量与预期一致: 共21份讲义）
+    console.log(`已加载 ${pdfFiles.length} 份课程讲义，包括新增的「SG函数与威佐夫游戏」和「公平组合游戏(博弈论)」`);
 </script>
 </body>
 </html>
