@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B站视频播放器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            outline: none;
+        }
+        .video-container {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            padding-bottom: 50.625%;
+            height: 0;
+        }
+        .video-container iframe,
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.7);
+            background: #000;
+            object-fit: contain;
+        }
+        @media (max-width: 768px) {
+            .video-container {
+                width: 100%;
+                padding-bottom: 56.25%;
+            }
+            .video-container iframe,
+            .video-container video {
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body tabindex="-1">
+    <div class="video-container" id="playerContainer">
+        <iframe
+            id="bilibiliPlayer"
+            src="//player.bilibili.com/player.html?bvid=BV1UVcEzJE2E&page=1&high_quality=1&danmaku=0"
+            scrolling="no"
+            frameborder="0"
+            allowfullscreen="true"
+            sandbox="allow-scripts allow-same-origin allow-popups"
+            allow="autoplay; fullscreen"
+            loading="lazy"
+        ></iframe>
+    </div>
+
+    <input type="file" id="localFileInput" accept="video/*" style="display:none;">
+
+    <script>
+        // ---------- 提示信息（已更新） ----------
+        const hintMessage = "Alt+Y切换视频源（可直接粘贴类似 https://www.bilibili.com/video/BV1xx?p=2 的完整链接，也可以单独输入 BV1xx?p=2 或纯 BV 号（默认第 1 P）），Alt+L本地上传视频，Alt+J开关视频和声音，Alt+K关闭该功能，F键全屏，M键开关静音，点击视频上方（与标题之间的阴影处）后再按下快捷键即可，线上视频源仅限B站";
+
+        function showHint() {
+            alert(hintMessage);
+        }
+        window.addEventListener('DOMContentLoaded', showHint);
+        document.addEventListener('click', function firstClickHint() {
+            showHint();
+            document.removeEventListener('click', firstClickHint);
+        });
+        document.addEventListener('click', () => {
+            document.body.focus();
+        });
+
+        // ---------- 提取 BV 号 和 分P页码 ----------
+        function extractBVAndPage(str) {
+            const bvMatch = str.match(/BV[0-9A-Za-z]+/);
+            if (!bvMatch) return null;
+            const bvid = bvMatch[0];
+            
+            const pageMatch = str.match(/[?&]p=(\d+)/);
+            const page = pageMatch ? parseInt(pageMatch[1], 10) : 1;
+            
+            return { bvid, page };
+        }
+
+        // ---------- 播放器状态 ----------
+        let currentSource = 'bilibili';
+        let currentBV = 'BV1UVcEzJE2E';
+        let currentPage = 1;
+        let currentLocalFile = null;
+        let isClosed = false;
+        let savedVideoElement = null;
+
+        function switchToBilibili(bvid, page = 1) {
+            const container = document.getElementById('playerContainer');
+            container.innerHTML = '';
+            const iframe = document.createElement('iframe');
+            iframe.id = 'bilibiliPlayer';
+            iframe.src = `//player.bilibili.com/player.html?bvid=${bvid}&page=${page}&high_quality=1&danmaku=0`;
+            iframe.setAttribute('scrolling', 'no');
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('allowfullscreen', 'true');
+            iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups');
+            iframe.setAttribute('allow', 'autoplay; fullscreen');
+            iframe.setAttribute('loading', 'lazy');
+            container.appendChild(iframe);
+            
+            currentSource = 'bilibili';
+            currentBV = bvid;
+            currentPage = page;
+            currentLocalFile = null;
+            isClosed = false;
+            savedVideoElement = null;
+        }
+
+        function switchToLocalVideo(file) {
+            const container = document.getElementById('playerContainer');
+            container.innerHTML = '';
+            const video = document.createElement('video');
+            video.controls = true;
+            video.autoplay = true;
+            video.src = URL.createObjectURL(file);
+            container.appendChild(video);
+            
+            currentSource = 'local';
+            currentLocalFile = file;
+            currentBV = null;
+            currentPage = 1;
+            isClosed = false;
+            savedVideoElement = null;
+        }
+
+        function closeVideo() {
+            if (isClosed) return;
+            const container = document.getElementById('playerContainer');
+            if (currentSource === 'bilibili') {
+                container.innerHTML = '';
+                isClosed = true;
+            } else if (currentSource === 'local') {
+                const video = container.querySelector('video');
+                if (video) {
+                    video.pause();
+                    video.muted = true;
+                    savedVideoElement = video;
+                    container.innerHTML = '';
+                    isClosed = true;
+                }
+            }
+        }
+
+        function restoreVideo() {
+            if (!isClosed) return;
+            const container = document.getElementById('playerContainer');
+            if (currentSource === 'bilibili') {
+                const iframe = document.createElement('iframe');
+                iframe.id = 'bilibiliPlayer';
+                iframe.src = `//player.bilibili.com/player.html?bvid=${currentBV}&page=${currentPage}&high_quality=1&danmaku=0&autoplay=1`;
+                iframe.setAttribute('scrolling', 'no');
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('allowfullscreen', 'true');
+                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups');
+                iframe.setAttribute('allow', 'autoplay; fullscreen');
+                iframe.setAttribute('loading', 'lazy');
+                container.appendChild(iframe);
+                isClosed = false;
+                savedVideoElement = null;
+            } else if (currentSource === 'local') {
+                if (savedVideoElement) {
+                    container.appendChild(savedVideoElement);
+                    savedVideoElement.muted = false;
+                    savedVideoElement.play().catch(() => {});
+                    savedVideoElement = null;
+                    isClosed = false;
+                }
+            }
+        }
+
+        // 新增：彻底关闭页面功能
+        function destroyPage() {
+            // 尝试关闭窗口（仅在脚本打开的窗口中有效）
+            window.close();
+            // 若无法关闭（大多数浏览器会阻止），则清空页面内容并显示提示
+            document.body.innerHTML = '<div style="color:white; text-align:center; padding-top:40vh; font-size:24px;">页面已关闭，可手动关闭标签页</div>';
+            // 移除所有事件监听（简单处理：替换 document 为新的）
+            // 也可以直接停止所有后续操作，这里简单替换
+        }
+
+        document.addEventListener('keydown', function(e) {
+            // Alt+Y : 切换 B 站视频
+            if (e.altKey && (e.key === 'y' || e.key === 'Y')) {
+                e.preventDefault();
+                if (isClosed) restoreVideo();
+                const input = prompt('请输入B站视频链接（可带分P参数）或BV号：', 'BV1UVcEzJE2E');
+                if (input !== null && input.trim() !== '') {
+                    const result = extractBVAndPage(input.trim());
+                    if (result) {
+                        switchToBilibili(result.bvid, result.page);
+                    } else {
+                        alert('无效的B站视频源，请检查是否包含正确的BV号。');
+                    }
+                }
+            }
+
+            // Alt+L : 本地上传视频
+            if (e.altKey && (e.key === 'l' || e.key === 'L')) {
+                e.preventDefault();
+                if (isClosed) restoreVideo();
+                document.getElementById('localFileInput').click();
+            }
+
+            // Alt+J : 开关视频和声音
+            if (e.altKey && (e.key === 'j' || e.key === 'J')) {
+                e.preventDefault();
+                if (isClosed) {
+                    restoreVideo();
+                } else {
+                    closeVideo();
+                }
+            }
+
+            // Alt+K : 关闭该功能（彻底删除页面内容）
+            if (e.altKey && (e.key === 'k' || e.key === 'K')) {
+                e.preventDefault();
+                destroyPage();
+            }
+        });
+
+        document.getElementById('localFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                switchToLocalVideo(file);
+            }
+            this.value = '';
+        });
+    </script>
+</body>
+</html>
